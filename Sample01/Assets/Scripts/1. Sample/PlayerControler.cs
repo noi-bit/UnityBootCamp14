@@ -1,9 +1,12 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerControler : MonoBehaviour
 {
     public float speed;
     private Rigidbody rb; //rigidbody클래스
+    public Text score;
+    private int a = 00;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -12,6 +15,8 @@ public class PlayerControler : MonoBehaviour
         rb = GetComponent<Rigidbody>();//컴포넌트의 값을 가져온다(해당기능을 가져온다) - <Rigidbody>
         //GetComponent<T>(); -게임 오브젝트에 붙어있는 컴포넌트를 가져오는 기능./ T : Type
         Debug.Log("설정이 완료되었습니다!^^");//Deletebug - 버그 검사, 해결 / Log - 작업내역
+        score.text = "score :" + a;
+
     }
 
     // Update is called once per frame, 프레임마다의 동작
@@ -26,7 +31,6 @@ public class PlayerControler : MonoBehaviour
 
         //이동좌표(벡터) 설정
         Vector3 movement = new Vector3(horizontal,0,vertical);//(x좌우,y위아래,z앞뒤)동적 정보, new 만든 순간부터 생성되는거라 start에서 작성이 안되기 때문에 용량 절감
-
         rb.AddForce(movement * speed *Time.deltaTime);
     }
 
@@ -38,12 +42,17 @@ public class PlayerControler : MonoBehaviour
             Debug.Log("아이템 획득!");
             //충돌체(other - Item Box)게임오브젝트를 비활성화합니다.
             other.gameObject.SetActive(false);
+            a += 10;
+            score.text = "score :" + a;
         }
         if(other.gameObject.CompareTag("obstacle"))
         {
-            Debug.Log("속도가 50% 감소합니다.");
-            speed /= 2;
+            Debug.Log("속도가 50% 증가합니다.");
+            speed *= 2;
             other.gameObject.SetActive(false);
+            a += 50;
+            score.text = "score :" + a;
+
         }
     }
 
