@@ -3,19 +3,26 @@ using UnityEngine.UI;
 
 public class ScoreText : MonoBehaviour
 {
-    public GameObject sphere;
-    public Text scoreText;
-    private int score = 00;
+    public Text text;
+    float spawnTime = 2.0f;
+    float time = 0.0f;
+    private int a = 0;
 
     void Start()
     {
-        score = 00;
-        scoreText.text = "Score : " + score;
+
+        text.text = "Score : " + a; 
 
     }
 
     void Update()
     {
-        
+        time += Time.deltaTime;
+        if (time > spawnTime)
+        {
+            a += 10;
+            text.text = "Score :" + a;
+            time = 0.0f;
+        }
     }
 }

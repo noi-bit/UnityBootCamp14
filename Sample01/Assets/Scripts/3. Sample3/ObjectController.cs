@@ -5,12 +5,12 @@ public class ObjectController : MonoBehaviour
 {
     public GameObject player;
     public Text text;
-    private int a=0;//점수
+    private static int score=0;//점수
 
     void Start()
     {
         player = GameObject.Find("mini simple skeleton demo");
-        
+        text.text = "Score :" + score;
     }
 
     void Update()
@@ -20,8 +20,6 @@ public class ObjectController : MonoBehaviour
         //낙하물의 y축이 -2보다 작다면 낙하물을 파괴하는 코드
         if(transform.position.y < -2)
         {
-            a += 10;
-            text.text = "score :" + a;
             Destroy(gameObject);//명령 이후로 영구적으로 파괴 
         }
         
