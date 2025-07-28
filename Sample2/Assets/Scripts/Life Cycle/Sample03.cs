@@ -9,7 +9,6 @@ using UnityEngine;
 
 public class Sample03 : MonoBehaviour
 { 
-
     Rigidbody rb;
     Vector3 pos;
 

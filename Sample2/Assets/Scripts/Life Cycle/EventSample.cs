@@ -36,7 +36,6 @@ public class EventSample : MonoBehaviour
     void Start()
     {
         Debug.Log("[Start]");
-        Debug.Log("[Start]");
         Debug.Log("해당 영역에서 코루틴에 대한 실행이 가능합니다.");
     }
         //Awake나 Start의 공통점 - 둘 다 기본적으로 값에 대한 초기화(할당)을 수행하는 위치입니다.
