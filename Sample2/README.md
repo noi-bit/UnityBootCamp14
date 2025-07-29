@@ -1,6 +1,6 @@
 # 250728
 
-## 유니티의 생명주기
+### 유니티의 생명주기
 > 유니티에서 사용되는 이벤트함수(생명주기) - 유니티에서는 프로그램의 실행부터 종료까지의 작업 명령을 함수로 제공합니다.
 > 유니티에서는 스크립트의 실행, 활성화, 프레임 당 호출 등 상황에 맞게 작업할 수 있는 작업공간이 존재합니다.
 
@@ -127,3 +127,44 @@ public class Sample03 : MonoBehaviour
 >GetComponent<Rigidbody>().AddForce(pos * 5); - 프레임마다 호출 :
          매 프레임마다 GetComponent로 정보를 가져오니 그만큼 성능 저하
         일시적으로 한번만 불러올 때는 사용 ㅇㅋ(웬만하면 update에서 사용 x)
+
+
+### 벡터
+> 벡터는 크기와 방향을 가진 물리량으로 유니티에서 위치(Position), 이동(Movement), 방향(Direction), 힘(Force)
+> 등을 표현할 때 사용합니다
+> 
+> Vector3 -> x,y,z(3D)
+> 
+> Vector2 -> x,y(2D)
+>
+>>예시(게임 오브젝트의 Transform을 이용해 Vector값 구하기)
+```cs
+public Transform A_CUBE;
+public Transform B_CUBE;
+
+void Start()
+{
+Vector3 posA = A_CUBE.position;
+Vector3 posB = B_CUBE.position;
+//큐브 위치설정
+
+Vector BtoA = posB-posA;
+Vector AtoB = posA-posB;
+//두 벡터의 차 => "방향 벡터"
+```
+>>거리 측정(Distance의 수학적 로직)
+>>
+>>a = (ax, ay, az), b = (bx, by, bz)라고 할 때,
+>>
+>>두 벡터 사이의 거리는 각 축에 대한 차에 제곱의 합에 대한 루트 값
+>>> √((bx-ax)^2 + (by-ay)^2 + (bz-az)^2)
+>>
+>>유니티의 Mathf 클래스를 기반으로 바꾸면?
+```cs
+ Vector3 dif = posB - posA;
+ float distance = Mathf.Sqrt(dif.x * dif.x + dif.y * dif.y + dif.z * dif.z);
+ Debug.Log(distance);
+
+ distance = Vector3.Distance(posA, posB); //== √((bx-ax)^2 + (by-ay)^2 + (bz-az)^2)
+ Debug.Log(distance);
+```
