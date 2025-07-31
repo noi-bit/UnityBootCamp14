@@ -791,7 +791,7 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "\uC544\uC774\uD15C \uC774\uB984\n\uAC15\uD654\uC218\uCE58(\uAC15\uD654\uD55C
-    \uD69F\uC218)( +1)"
+    \uD69F\uC218)( +1)."
 --- !u!222 &1586230891
 CanvasRenderer:
   m_ObjectHideFlags: 0
