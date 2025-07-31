@@ -1,6 +1,6 @@
 # 250728
 
-## 유니티의 생명주기
+### 유니티의 생명주기
 > 유니티에서 사용되는 이벤트함수(생명주기) - 유니티에서는 프로그램의 실행부터 종료까지의 작업 명령을 함수로 제공합니다.
 > 유니티에서는 스크립트의 실행, 활성화, 프레임 당 호출 등 상황에 맞게 작업할 수 있는 작업공간이 존재합니다.
 
@@ -127,3 +127,157 @@ public class Sample03 : MonoBehaviour
 >GetComponent<Rigidbody>().AddForce(pos * 5); - 프레임마다 호출 :
          매 프레임마다 GetComponent로 정보를 가져오니 그만큼 성능 저하
         일시적으로 한번만 불러올 때는 사용 ㅇㅋ(웬만하면 update에서 사용 x)
+
+
+### 벡터
+> 벡터는 크기와 방향을 가진 물리량으로 유니티에서 위치(Position), 이동(Movement), 방향(Direction), 힘(Force)
+> 등을 표현할 때 사용합니다
+> 
+> Vector3 -> x,y,z(3D)
+> 
+> Vector2 -> x,y(2D)
+>
+>>예시(게임 오브젝트의 Transform을 이용해 Vector값 구하기)
+```cs
+public Transform A_CUBE;
+public Transform B_CUBE;
+
+void Start()
+{
+Vector3 posA = A_CUBE.position;
+Vector3 posB = B_CUBE.position;
+//큐브 위치설정
+
+Vector BtoA = posB-posA;
+Vector AtoB = posA-posB;
+//두 벡터의 차 => "방향 벡터"
+```
+>>거리 측정(Distance의 수학적 로직)
+>>
+>>a = (ax, ay, az), b = (bx, by, bz)라고 할 때,
+>>
+>>두 벡터 사이의 거리는 각 축에 대한 차에 제곱의 합에 대한 루트 값
+>>> √((bx-ax)^2 + (by-ay)^2 + (bz-az)^2)
+>>
+>>유니티의 Mathf 클래스를 기반으로 바꾸면?
+```cs
+ Vector3 dif = posB - posA;
+ float distance = Mathf.Sqrt(dif.x * dif.x + dif.y * dif.y + dif.z * dif.z);
+ Debug.Log(distance);
+
+ distance = Vector3.Distance(posA, posB); //== √((bx-ax)^2 + (by-ay)^2 + (bz-az)^2)
+ Debug.Log(distance);
+```
+
+
+>벡터의 요소
+>x : x축의 값
+>y : y축의 값
+>z : z축의 값
+>w : 셰이더나 수학 계산 등에서 사용되는 Vector4에서의 w축
+>
+>※ 값(value) vs 참조(reference)
+ 값 : 변수의 데이터가 직접 저장됩니다.(ex. int a = 5; / a에 5라고 하는 데이터가 바로 저장되어있다)
+ 참조 : 변수에 데이터가 저장된 메모리 주소 값이 저장되는 경우.
+        ex) VectorSample a = new VectorSample(); - 클래스는 대표적인 참조 타입.(위치가 중요하다)
+>
+> ※ 메모리 저장 영역 / 프로그램 실행 개념
+프로그램이 실행되기 위해서는 운영체제(OS)가 프로그램의 정보를 메모리에 로드해야 합니다.
+프로그램이 실행되는 동안 중앙제어장치(CPU)가 코드를 처리하기 위해 메모리가 명령어와 데이터들을 저장하고 있어야 함
+
+
+>컴퓨터 메모리는 바이트(Byte) 단위로 번호가 새겨진 선형 공간을 의미합니다.
+낮은 주소부터 높은 주소까지의 저장되는 영역이 다르게 설정되어 있습니다.
+낮은 주소 : 메모리의 시작 부분(비교적 가벼운 데이터들로 구성)
+높은 주소 : 메모리의 끝 부분(높은 주소로 갈수록 순차적으로 무거운 데이터들로 구성)
+
+
+>대표적인 메모리 공간
+>>1. 코드 영역(code) : 실행할 프로그램 코드가 저장되는 영역(텍스트 영역)
+                      CPU에서 저장된 명령을 하나씩 가져가서 처리합니다.
+                      "프로그램 시작부터 종료까지 계속 남아있는 데이터."
+
+>>2. 데이터 영역(data) : 프로그램에서 전역 변수, 정적 변수가 저장되는 영역
+    >>>전역 변수(global) : 프로그램 어디서나 접근 가능한 변수(C#에서는 전역 대신 클래스 수준의 정적 변수를 사용합니다.)
+    >>>정적 변수(static) : static 키워드가 붙은 변수는 별도의 객체 생성 없이 클래스명.변수명으로 직접 접근하는것이 가능.
+                      프로그램 시작 시에 할당이 되고 그 이후부터 종료 시점까지 유지(용량 커질 가능성이 있다)
+
+>>3. 힙(heap) : 프로그래머가 직접 저장공간에 대한 할당과 해제를 진행하는 영역
+              값에 대한 등록도, 값에 대한 제거도 프로그래머가 설계합니다.
+         특징) 참조 타입은 힙에 저장됩니다.
+         C# 힙 영역의 데이터는 GC에 의해 자동으로 관리됩니다.
+         저장 순서, 정렬에 대한 작업을 따로 신경 쓸 필요가 X
+         단, 메모리가 크고 GC에 의해 자동으로 처리되는만큼 많이 사용되면 성능이 저하되고 통제가 어렵다.
+         접근 속도가 느린 편입니다.
+
+>>4. 스택(stack) : 프로그램이 자동으로 사용하는 임시 메모리 영역 //스택오버플로우
+                함수 호출 시 생성되는 변수(지역변수, 매개변수)가 저장되는 영역
+                함수의 호출이 완료되면 사라지는 데이터, 이때의 호출 정보 == stack frmae(스택 프레임)
+                매우 빠른 속도로 접근이 가능합니다.(할당과 해제의 비용이 사실상 없다)
+                데이터가 먼저 들어온 데이터가 누적되고 가장 마지막에 남은 데이터가 먼저 제거되는 방식(LIFO)
+>벡터의 특징
+1. 값 타입(value)으로 참조가 아닌 값 그 자체를 의미한다.(구조체 struct)
+ --> 계산이 빠르게 처리됩니다.
+2. 값을 복사할 경우 값 그 자체를 복사하기만 하면 된다.
+3. 벡터에 대한 계산 보조기능이 많이 제공됩니다.(magnitude, normalized, Dot, Cross ,,,)
+4. 벡터는 스택(stack) 영역의 메모리에서 저장이 됩니다.
+
+###선형 보간, 구면 선형 보간
+>선형 보간
+```cs
+public class LinearInter : MonoBehaviour //선형 보간(linear interpolate) - Cube a
+{
+    //Vector3.Lerp(start,end,t);
+    //start -> end까지 t에 따라 선형 보간합니다.
+    //--> 해당 방향으로 일정 간격 천천히 이동하는 코드
+    //t의 범위(0 ~ 1 -- float 값으로)
+
+    public Transform target;
+    public float speed = 1.0f;
+
+    private Vector3 start_position;
+    private float t = 0.0f; //(0부터 1까지의 범위를 가지고있다)
+
+
+    private void Start()
+    {
+        start_position = transform.position; //해당 스크립트를 가지고있는 오브젝트 - Cube a
+    }
+
+    private void Update()
+    {
+        //보간이 끝나지 않았을 때만 이동을 진행하겠습니다, t가 1이면 끝이라는 뜻
+        if(t<1.0f)
+        {
+            t += Time.deltaTime * speed;
+            transform.position = Vector3.Lerp(start_position, target.position, t);
+        }
+    }
+}
+```
+>구면 선형 보간
+```cs
+public class Sphericalnter : MonoBehaviour //구면 선형 보간(Spherically interpolate) - Cube b
+{
+    public Transform target;
+    public float speed = 1.0f;
+
+    private Vector3 start_position;
+    private float t = 0.0f; //(0부터 1까지의 범위를 가지고있다)
+
+
+    private void Start()
+    {
+        start_position = transform.position; //해당 스크립트를 가지고있는 오브젝트 - Cube a
+    }
+
+    private void Update()
+    {
+        if (t < 1.0f)
+        {
+            t += Time.deltaTime * speed;
+            transform.position = Vector3.Slerp(start_position, target.position, t);
+        }
+    }
+}
+```
