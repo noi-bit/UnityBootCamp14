@@ -53,7 +53,7 @@ public class InspectorAttributes : MonoBehaviour
     //      d. [Serializable] 속성이 붙은 클래스
     //      e. 배열/리스트
     [SerializeField]//데이터에 접근할 수 있도록 직렬화한다, 유니티에서 비공개(private) 필드를 인스펙터에 노출시키고 유니티의 직렬화 시스템에 포함시킴
-    private int value2 = 7;
+    //private int value2 = 7;
 
 
     //Space(높이) : 적은 높이만큼 간격이 생김
