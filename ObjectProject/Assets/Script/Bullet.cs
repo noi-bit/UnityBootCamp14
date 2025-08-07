@@ -52,12 +52,13 @@ public class Bullet : MonoBehaviour
         //이펙트 연출(파티클)
         if (effect_prefab != null)
         {
-            Instantiate(effect_prefab, transform.position, Quaternion.identity);//Quaternion.identity는 0,0,0값 아니야?
+            Instantiate(effect_prefab, transform.position, Quaternion.identity);
         }
         
         ReturnPool();
     }
-    
+
+
     //메소드의 명령이 한줄일 경우, => 로 사용할 수 있다
     void ReturnPool() => pool.Return(gameObject);//pool에 값이 없으면 nullreference가 된다
 }

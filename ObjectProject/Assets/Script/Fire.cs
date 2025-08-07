@@ -11,6 +11,9 @@ public class Fire : MonoBehaviour
     //총알 발사를 위한 풀
     public BulletPool pool;
 
+    private float bulletTime = 0.2f;
+    private float bulletTImer = 0;
+
     //총알 발사 지점
     public Transform pos;
 
@@ -19,11 +22,14 @@ public class Fire : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space))
+        bulletTImer += Time.deltaTime;
+        if(Input.GetMouseButton(0)&& bulletTImer >= bulletTime)
         {
+            bulletTImer = 0f;
             var bullet = pool.GetBullet();
             bullet.transform.position = pos.position;
             bullet.transform.rotation = pos.rotation;
+
         }
     }
 
