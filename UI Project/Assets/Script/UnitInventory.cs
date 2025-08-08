@@ -8,6 +8,18 @@ public class UnitInventory : MonoBehaviour
     public string[] ingredient;//재료
     public string ingredientList = "USB,헤드폰,마이크,루비,핸드폰";
 
+    //public enum Ingredient_control
+    //{
+    //    None = 0,
+    //    USB,
+    //    헤드폰,
+    //    마이크,
+    //    루비,
+    //    핸드폰
+    //}
+
+
+
     //public Text money;
     //public Text indList;
 

@@ -18,7 +18,7 @@ public class UpgradeUI : MonoBehaviour
     public Text lineText;//미쿠대사
     public Text money;//미쿠머니
     public Text indList;//미쿠재료
-
+    
     //재료
 
     //자료형[] 배열이름 = new 자료형[] {값, 값1, 값2...};
@@ -74,6 +74,7 @@ public class UpgradeUI : MonoBehaviour
     {
         indList.text = " ";
         unitInventory.ingredient = unitInventory.ingredientList.Split(',');
+        //UnitInventory.Ingredient_control.핸드폰;
         foreach (string item in unitInventory.ingredient)
         {
             indList.text += $"{item} ";
