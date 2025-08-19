@@ -1,0 +1,21 @@
+using UnityEngine;
+
+
+public class BuildProfileSample : MonoBehaviour
+{
+    void Start()
+    {
+#if CUSTOM_DEBUG_MODE
+        //if (!Application.isPlaying) {
+        Debug.Log("디버그 모드에서 실행중인 기능입니다.");
+#elif CUSTOM_RELEASE_MODE //위의 조건이 만족한다면 이곳의 기능은 비활성화 상태
+        Debug.Log("릴리스 모드에서 실행 중인 기능입니다.");
+#endif
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+}
