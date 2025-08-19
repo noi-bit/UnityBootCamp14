@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    public EnemyManager manager;
+    public static int count = 0;
+    public int Nextstagecount = 5;
     public float speed = 5;
     public enum EnemyType
     {
@@ -12,16 +15,18 @@ public class Enemy : MonoBehaviour
     }
     public EnemyType type = EnemyType.Down; //기본적으로는 아래로 내려가는 움직임만
     Vector3 dir;//방향설정
+    public GameObject explosionFactory;
+    public GameObject explosionTexteffect;
 
     private void Start() //적의 움직임 패턴
     {
         //함수 분리
         //장점 : 1. 보기 쉽다(가독성 높아짐) 2. 재사용성이 높아질 수 있음(공격 패턴 리셋, 재생성 시의 방향 설정 등)
-        PatternSetting();
     }
 
     void Update()
     {
+        PatternSetting();
         transform.position += dir * speed * Time.deltaTime;
     }
 
@@ -55,11 +60,32 @@ public class Enemy : MonoBehaviour
     //Is Trigger 체크가 진행된 오브젝트와의 트리거 충돌은? onTriggerEnter(충돌 "여부"만 체크)
     private void OnCollisionEnter(Collision collision)
     {
+        //stopspawn();
+        //클래스명.Instance.메소드명()으로 기능만 사용하는 것이 가능해짐
+        ScoreManager.instance.SetScore(5);
+
+        GameObject explosion = Instantiate(explosionFactory, transform.position, Quaternion.identity);
+
+        int rand = Random.Range(0, 10);
+        if(rand < 4)
+        {
+            GameObject explosionText = Instantiate(explosionTexteffect, transform.position += new Vector3(0, 0.5f, 0), Quaternion.identity);
+        }
         //충돌 이벤트 발생
         //오브젝트간의 물리적인 충돌 발생 시 호출
         //둘중 하나라도 Rigidbody를 가지고 있어야 처리됨
         Destroy(collision.gameObject); //상대방 파괴(총알)
         Destroy(gameObject); //자신 파괴
+
+        count++;
+    }
+
+    public void stopspawn()
+    {
+        if (count >= Nextstagecount)
+        {
+            manager.currentTime = 0;
+        }
     }
 
 }

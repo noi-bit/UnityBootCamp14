@@ -5,9 +5,11 @@ using UnityEngine;
 //작업 순서 : 시간체크 - 현재시간>시간체크 시간(쿨타임) - 적 생성
 public class EnemyManager : MonoBehaviour
 {
+    public Enemy Enemy;
     public GameObject EnemyFactory; //적 생성공장
     public GameObject spawnArea; //생성 지역(배열)
 
+    
     public float min =1, max =5; //소환 시간 간격
     public float currentTime; //현재 시간
     public float createTime = 1; //쿨타임
@@ -29,4 +31,6 @@ public class EnemyManager : MonoBehaviour
             createTime = Random.Range(min,max); //쿨타임이 1~4의 값이 된다
         }
     }
+
+    
 }
