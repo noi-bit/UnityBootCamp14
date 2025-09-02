@@ -5,34 +5,26 @@ public class TimerScript : MonoBehaviour
 {
     public ScoreManager scoreManager;
     public Text timeText;
-    public float MaxTime = 60f;
-    int currentTime;
+    public float MaxTime;
+    float  currentTime;
 
-    void Start()
+    public void Timer()
     {
-        timeText.text = $"Time : {MaxTime}";
-    }
+        //currentTime = MaxTime;
+        if (currentTime <= 0) return;
 
-    
-    void Update()
-    {
-        TimerOn();
-    }
-
-    void TimerOn()
-    {
-        if (!scoreManager.gameEnd)
-        {
-            MaxTime -= Time.deltaTime;
-            currentTime = Mathf.FloorToInt(MaxTime);
+        else
+        {   
+            currentTime -= Time.deltaTime;
+            timeText.text = $"Time : {Mathf.FloorToInt(currentTime)}";
         }
-
-        else if (currentTime <= 0)
-        {
-            currentTime = 0;
-            scoreManager.GameEnd();
-        }
-
-        timeText.text = $"Time : {currentTime}";
+        
     }
+
+    public void TimerReset()
+    { 
+         currentTime = MaxTime;
+         timeText.text = $"Time : {Mathf.FloorToInt(currentTime)}";
+    }
+
 }

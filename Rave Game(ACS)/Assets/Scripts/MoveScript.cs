@@ -26,18 +26,20 @@ public class MoveScript : MonoBehaviour
 
         lastMove = flip;
 
-        scoreManager.Scoreup(1);
+        scoreManager.ScoreUP(1);
+
         if (scoreManager.score > scoreManager.comboScore)
         { 
-            scoreManager.ComboImage.gameObject.SetActive(true);
-            scoreManager.ScoreCombo(1);
+            scoreManager.ComboUP(1);
             //scoreManager.ScrollValuedown();
         }
     }
 
+   
+
     public void inputAction()
     {
-        if (c)
+        if (!scoreManager.gameEnd)
         {
             if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
@@ -51,6 +53,4 @@ public class MoveScript : MonoBehaviour
         }
 
     }
-
-
 }
