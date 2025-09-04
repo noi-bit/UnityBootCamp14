@@ -9,11 +9,13 @@ public class SliderControler : MonoBehaviour
     private void Start()
     {
         Slider slider = gameObject.GetComponent<Slider>();
-        slider.onValueChanged.AddListener(SliderChange);
 
-        slider.wholeNumbers = true; //현재 슬라이더는 float값으로 되어있는데, 이 문법을 사용해서 정수값만 받아오게 함
-        slider.minValue = 3; //미로를 만들 수 있는 최솟값
-        slider.maxValue = 51; //최댓값
+        slider.minValue = 3;
+        slider.maxValue = 51;
+
+        slider.wholeNumbers = true;
+        slider.onValueChanged.AddListener(SliderChange);
+        
     }
 
     void SliderChange(float value)

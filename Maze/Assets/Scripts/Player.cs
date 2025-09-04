@@ -5,7 +5,7 @@ using UnityEngine;
 class Pos
 {
     public Pos(int y, int x) { Y = y; X = x; }
-    
+   
     public int Y;
     public int X;
 }
@@ -30,8 +30,6 @@ public class Player : MonoBehaviour
 
     List<Pos> _points = new List<Pos>();
 
-
-    //우수법 - (미로를 탈출하기 위한)오른손 법칙
     public void Initialze(int posY, int posX, Board board)
     {
         PosY = posY;
@@ -40,22 +38,155 @@ public class Player : MonoBehaviour
 
         transform.position = new Vector3(PosX, 0, -PosY);
 
+        _points.Clear();
+        _lastIndex = 0;
+
+        BFS();
+        _isBoardCreated = true;
+    }
+
+   void BFS()
+   {
+        int[] deltaY = new int[] { -1,0,1,0 };
+        int[] deltaX = new int[] { 0,-1,0,1 };
+
+        bool[,] found = new bool[_board.Size, _board.Size];
+        Pos[,] parent = new Pos[_board.Size, _board.Size];
+
+        //Stack<Pos> _points = new Stack<Pos>();
+
+        Queue<Pos> queue = new Queue<Pos>();
+        queue.Enqueue(new Pos(PosY, PosX));
+        found[PosY, PosX] = true;
+        parent[PosY, PosX] = new Pos(PosY, PosX);//자기자신을 부모로 설정해줌
+
+        while (queue.Count > 0)
+        {
+            Pos pos = queue.Dequeue(); //첫 지점을 끄집어내서
+            int nowY = pos.Y;
+            int nowX = pos.X; //정수 형태로 만든다
+
+            for(int i = 0; i<4;  i++)
+            {
+                int nextY = nowY + deltaY[i]; //i가 0일때 위, 1일때 아래,,.뭐 이런식으로 for문이 돌아가면서 모든 방향을 확인?
+                int nextX = nowX + deltaX[i];
+
+                //맵의 크기를 초과하지 않는지
+                if (nextY < 0 || nextY >= _board.Size || nextX < 0 || nextX >= _board.Size)
+                    continue;
+
+                //체크 하려는 점이 갈수 있는 점인지
+                if (_board.Tiles[nextY, nextX] == TileType.Wall)
+                    continue;
+
+                //이미 찾았던 점이라면
+                if (found[nextY, nextX] == true)
+                    continue;
+
+                queue.Enqueue(new Pos(nextY, nextX));
+                found[nextY,nextX] = true;
+                parent[nextY, nextX] = new Pos(nowY, nowX);
+            }
+        }
+
+        int y = _board.DestY;
+        int x = _board.DestX;
+
+        while (parent[y,x].Y != y ||  parent[y,x].X != x) //목적지 좌표부터 하나하나 거슬러 올라간다 시작지점까지 -> 최초지점이 아닐때만 반복임
+        {
+            //[0] -> 목적지
+            //[1] -> 목적지의 부모
+            //.....
+            //[마지막인덱스] -> 최초 지점
+
+            _points.Add(new Pos(y, x));
+            Pos pos = parent[y,x];
+            y = pos.Y;
+            x = pos.X;
+        }
+        _points.Add(new Pos(y, x));
+
+        _points.Reverse(); //-> 내부에 들어가 있는 정보들이 뒤집히게 된다
+                           //[0] -> 최초지점
+                           //[1] -> 최초지점 다음
+                           //.....
+                           //[마지막인덱스] -> 목적 지점
+   }
+
+    private const float MOVE_TICK = 0.1f;
+    private int _lastIndex = 0;
+    private float _sumTick = 0;
+
+    private void Update()
+    {
+        if (_lastIndex >= _points.Count)
+            return;
+
+        if (_isBoardCreated == false)
+            return;
+            
+        _sumTick += Time.deltaTime;
+        if (_sumTick < MOVE_TICK) //1초까지 기다리고 움직이게 한다
+            return;
+
+        _sumTick = 0;
+
+        /*
+        int dir = Random.Range(0, 4); //위아래왼쪽오른쪽으로 움직이는것 0,1,2,3
+
+        int NextY = PosY;
+        int NextX = PosX;
+
+        switch (dir)
+        {
+            case 0:
+                NextY = PosY - 1;
+                break;
+            case 1:
+                NextY = PosY + 1;
+                break;
+            case 2:
+                NextX = PosX - 1;
+                break;
+            case 3:
+                NextX = PosX + 1;
+                break;
+        }
+
+        if (NextY < 0 || NextY >= _board.Size) return;
+        if (NextX < 0 || NextX >= _board.Size) return; //맵 빠져나가는거 방지
+        if (_board.Tiles[NextY, NextX] == TileType.Wall) return; //벽으로 이동하는것 방지
+
+        PosY = NextY;
+        PosX = NextX;*///랜덤 움직임
+
+        PosY = _points[_lastIndex].Y;
+        PosX = _points[_lastIndex].X;
+        _lastIndex++;
+        
+        transform.position = new Vector3(PosX, 0 ,-PosY);
+    }
+
+
+    //우수법 - (미로를 탈출하기 위한)오른손 법칙
+    public void RightHand()
+    {
         // 내가 바라보는 방향 기준 앞 방향 타일을 확인하기 위한 좌표
-        int[] _frontY = new int[] { -1, 0, 1, 0};
-        int[] _frontX = new int[] { 0, -1, 0, 1};
+        int[] _frontY = new int[] { -1, 0, 1, 0 };
+        int[] _frontX = new int[] { 0, -1, 0, 1 };
 
         // 내가 바라보는 방향 기준 오른쪽 방향 타일을 확인하기 위한 좌표
-        int[] _rightY = new int[] {0, -1, 0, 1 };
-        int[] _rightX = new int[] {1, 0, -1, 0 };
+        int[] _rightY = new int[] { 0, -1, 0, 1 };
+        int[] _rightX = new int[] { 1, 0, -1, 0 };
 
         _points.Add(new Pos(PosY, PosX));
 
         //목적지 계산 전 까지 계속 실행
-        while (PosY != board.DestY || PosX != board.DestX) //보드의 목적지(보드 크기의 x,y에서 -2 한 값)까지 도달하지 않았으면 반복
+        while (PosY != _board.DestY || PosX != _board.DestX) //보드의 목적지(보드 크기의 x,y에서 -2 한 값)까지 도달하지 않았으면 반복
         {
             // 1.현재 바라보는 방향 기준으로 오른쪽의 타일이 wall이 아니면? -> 갈수있으면 오른쪽으로 회전 한 후 한 칸 간다!
             //      ㄴ> 내가 보는 방향 기준의 "오른쪽" 타일을 확인해야함
-            if (board.Tiles[PosY + _rightY[_dir], PosX + _rightX[_dir]] != TileType.Wall)
+            if (_board.Tiles[PosY + _rightY[_dir], PosX + _rightX[_dir]] != TileType.Wall)
             {
                 // 오른쪽 방향으로 90도 회전
                 _dir = (_dir - 1 + 4) % 4; //-> 모듈러 연산(modular arithmetic)을 이용한 원형 인덱스(circular index)패턴
@@ -84,7 +215,7 @@ public class Player : MonoBehaviour
 
             // 2. 현재 바라보는 방향 기준으로 다음 타일이 wall이 아니면? 한 칸 간다!
             //      ㄴ> 오른쪽으로는 못가는거임? ㅇㅅㅇ
-            else if (board.Tiles[PosY + _frontY[_dir], PosX + _frontX[_dir]] != TileType.Wall)
+            else if (_board.Tiles[PosY + _frontY[_dir], PosX + _frontX[_dir]] != TileType.Wall)
             {
                 PosY = PosY + _frontY[_dir];
                 PosX = PosX + _frontX[_dir];
@@ -102,60 +233,5 @@ public class Player : MonoBehaviour
                 // 왼쪽 방향으로 90도 회전 후 턴 넘기기
             }
         }
-        _isBoardCreated = true;
-    }
-
-    private const float MOVE_TICK = 0.1f;
-    private int _lastIndex = 0;
-    private float _sumTick = 0;
-
-    private void Update()
-    {
-        if (_lastIndex >= _points.Count)
-            return;
-
-        if (_isBoardCreated == false)
-            return;
-            
-        _sumTick += Time.deltaTime;
-
-        if (_sumTick < MOVE_TICK) //1초까지 기다린다
-            return;
-
-        _sumTick = 0;
-
-        //int dir = Random.Range(0, 4); //위아래왼쪽오른쪽으로 움직이는것 0,1,2,3
-
-        //int NextY = PosY;
-        //int NextX = PosX;
-
-        //switch (dir)
-        //{
-        //    case 0:
-        //        NextY = PosY - 1;
-        //        break;
-        //    case 1:
-        //        NextY = PosY + 1;
-        //        break;
-        //    case 2:
-        //        NextX = PosX - 1;
-        //        break;
-        //    case 3:
-        //        NextX = PosX + 1;
-        //        break;
-        //}
-
-        //if (NextY < 0 || NextY >= _board.Size) return;
-        //if (NextX < 0 || NextX >= _board.Size) return; //맵 빠져나가는거 방지
-        //if (_board.Tiles[NextY, NextX] == TileType.Wall) return; //벽으로 이동하는것 방지
-
-        //PosY = NextY;
-        //PosX = NextX;
-
-        PosY = _points[_lastIndex].Y;
-        PosX = _points[_lastIndex].X;
-        _lastIndex++;
-        
-        transform.position = new Vector3(PosX, 0 ,-PosY);
     }
 }

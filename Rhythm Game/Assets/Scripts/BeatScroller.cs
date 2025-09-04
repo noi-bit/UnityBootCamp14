@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class BeatScroller : MonoBehaviour
 {
+    public float t;
     public float beatTempo;
     public bool hasStarted;
     public SOscript SOscript;
@@ -15,16 +16,16 @@ public class BeatScroller : MonoBehaviour
     void Update()
     {
         if (!hasStarted)
-        {/*
-            if(Input.anyKeyDown)
+        {
+            t += Time.deltaTime;
+            if (t >= 0.566f)
             {
                 hasStarted = true;
             }
-        */
+        
         }
-        else
-        {
-            transform.position -= new Vector3(0f, beatTempo * Time.deltaTime, 0f);
-        }
+        
+           transform.position -= new Vector3(0f, beatTempo * Time.deltaTime, 0f);
+       
     }
 }

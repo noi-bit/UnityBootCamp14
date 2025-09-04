@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour
         instance = this;
         scoreText.text = "Score : 0";
         currentMultiplier = 1;
+
     }
 
     void Update()
@@ -40,7 +41,6 @@ public class GameManager : MonoBehaviour
             {
                 startPlaying = true;
                 theBS.hasStarted = true;
-
                 theMusic.Play();
             }
                     

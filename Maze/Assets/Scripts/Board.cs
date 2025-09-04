@@ -16,6 +16,7 @@ public class Board : MonoBehaviour
     public int DestY { get; set; }
     public int DestX { get; set; }
 
+    private Transform _maze;
     Material emptyMat;
     Material wallMat;
     Material goalMat;
@@ -24,6 +25,7 @@ public class Board : MonoBehaviour
     {
         DestY = Size - 2;
         DestX = Size - 2; //목적지 설정
+
 
         emptyMat = new Material(Shader.Find("Universal Render Pipeline/Lit"));
         emptyMat.color = Color.gray;
@@ -68,7 +70,7 @@ public class Board : MonoBehaviour
             {
                 if (x % 2 == 0 || y % 2 == 0)
                 {
-                    Tiles[y, x] = TileType.Wall;
+                    Tiles[y, x] = TileType.Wall;//격자 형태로 막아짐
                 }
 
                 else if(x==DestX && y==DestY)
@@ -138,13 +140,20 @@ public class Board : MonoBehaviour
 
     public void Spawn()
     {
+        if (_maze != null) //create 를 누를 때마다 맵이 새로 생성됨
+            Despawn();
+
+        _maze = new GameObject().transform;
+        _maze.parent = transform;
+        _maze.name = "Maze";
+
         for(int y = 0; y< Size; y++)
         {
             for(int x = 0; x< Size; x++)
             {
                 GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 go.transform.position = new Vector3(x, 0, -y);
-                go.transform.parent = transform;
+                go.transform.parent = _maze;
 
                 if (Tiles[y,x] == TileType.Empty || Tiles[y, x] == TileType.Goal)
                     go.transform.localScale = new Vector3(1, 0.1f, 1);
@@ -170,5 +179,9 @@ public class Board : MonoBehaviour
         return wallMat;
     }
 
-    
+    private void Despawn()
+    {
+        Destroy(_maze.gameObject);
+        _maze = null;
+    }
 }
