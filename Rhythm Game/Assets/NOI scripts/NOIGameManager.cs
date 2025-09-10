@@ -25,7 +25,7 @@ public class NOIGameManager : MonoBehaviour
         {
             //Metronum(temp);
             for(int i = 0; i<notes.Length; i++)
-            { Instantiate(notes[i]); }
+            { Instantiate(notes[i]);}
             time = 0;
 
         }
