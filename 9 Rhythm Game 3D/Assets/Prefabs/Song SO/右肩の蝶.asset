@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a2e006133b66be488a270a7c2412c40, type: 3}
+  m_Name: "\u53F3\u80A9\u306E\u8776"
+  m_EditorClassIdentifier: 
+  SongName: Butterfly on your Right Shoulder
+  music: {fileID: 8300000, guid: 3cc86c2e3f8ffce499eb03b944e62f8c, type: 3}
+  loop: 0
+  BPM: 140
+  firstBeatOffset: 0
+  volume: 1

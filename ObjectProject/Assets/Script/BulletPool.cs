@@ -50,6 +50,9 @@ public class BulletPool : MonoBehaviour
             {
                 //2. bullet을 활성화 시킨 후
                 bullet.SetActive(true);
+
+                /**/
+
                 //3. return 한다
                 return bullet;
             }
