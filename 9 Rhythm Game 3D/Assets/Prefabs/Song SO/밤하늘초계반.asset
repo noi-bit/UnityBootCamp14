@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a2e006133b66be488a270a7c2412c40, type: 3}
   m_Name: "\uBC24\uD558\uB298\uCD08\uACC4\uBC18"
   m_EditorClassIdentifier: 
+  CoverImage: {fileID: 21300000, guid: ded86b94d18a80e42a7190b1f0260f5b, type: 3}
   SongName: "\uBC24\uD558\uB298\uC758 \uCD08\uACC4\uBC18"
-  music: {fileID: 8300000, guid: ffca01c78e1684e48934cc34c8cf0ac9, type: 3}
+  music: {fileID: 8300000, guid: 7cdb7982a6057db4c83ca60e6fab249d, type: 3}
+  firstBeatOffset: 1.434
   loop: 0
-  BPM: 185
-  firstBeatOffset: 0
   volume: 1
+  BPM: 185

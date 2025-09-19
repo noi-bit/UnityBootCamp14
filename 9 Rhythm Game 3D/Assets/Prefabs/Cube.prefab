@@ -31,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 0.5, z: 1}
+  m_LocalScale: {x: 0, y: 0.5, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -149,5 +149,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53752d920e2f72d40a99b2d2dd4249e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Notedeletespeed: 0
-  Notedeletevalue: 0.005
+  original: {fileID: 2100000, guid: 6811c9551acd45b4b905bb17842ee5ba, type: 2}
+  target: {fileID: 2100000, guid: 383ed0a199741e041b2bf5d4e2dca511, type: 2}
+  Notedeletevalue: 0.007

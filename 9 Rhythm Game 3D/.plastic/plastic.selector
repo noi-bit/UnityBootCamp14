@@ -1,0 +1,4 @@
+repository "9 Rhythm Game 3D/9 Rhythm Game 3D@14569641591985@cloud"
+  path "/"
+    br "/main"
+    co "/main"
