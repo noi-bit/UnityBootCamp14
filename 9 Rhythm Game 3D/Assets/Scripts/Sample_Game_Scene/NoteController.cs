@@ -12,8 +12,8 @@ public class NoteController : MonoBehaviour
     public SongController songController; //노래 스크립트에서 노래의 박자,BPM등의 정보를 받아와야 함
 
     [Tooltip("몇 박마다 노트를 뽑을지에 대한 변수")]
-    [SerializeField] float spawnEveryNBeats; // float으로 변경
-    [SerializeField] int beatOffset = 0; //박자?오프셋
+    public float spawnEveryNBeats; // float으로 변경
+    public int beatOffset = 0; //박자?오프셋
 
     //[Tooltip("노트 사라지는 속도 = BPM에 비례함")]
     //[SerializeField] private float Notdeletespeed;
@@ -24,6 +24,7 @@ public class NoteController : MonoBehaviour
 
     private void Start() //구독 추가
     {
+      
         LevelLoad();
         if (pool == null) pool = FindAnyObjectByType<NoteObjectPool>();
         songController.createCube += Test;
@@ -49,14 +50,7 @@ public class NoteController : MonoBehaviour
 
         var nc = go.GetComponent<NotePrefab>();
 
-        // [추가] 박자 갱신 시점의 DSP 시간 계산
-        double _targetDspTime = songController.dspSongTime + (beatIndex - beatOffset + 1) * songController.secPerBeat;
-
-        // [추가] 큐브 생성 시점의 DSP 시간
-        double _cubeSpawnDspTime = AudioSettings.dspTime;
-
-        //nc.songController = songController;
-        nc.NoteSizeUp(new Vector3(1.25f,0.5f,1.25f), songController.nowCubetime, _targetDspTime, _cubeSpawnDspTime);
+        nc.NoteSizeUp(new Vector3(1.25f,0.5f,1.25f), songController.nowCubetime);
         //nc.SetLifeByBpm(songController.sodata.BPM);
     }
 

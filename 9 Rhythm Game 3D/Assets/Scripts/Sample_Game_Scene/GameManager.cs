@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -24,11 +25,21 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    private void Update()
+    private void OnEnable()
     {
-        
+        SceneManager.sceneLoaded += GameSceneLoadt;
     }
 
+    private void GameSceneLoadt(Scene scene, LoadSceneMode mode)
+    {
+        if(scene.buildIndex ==2)
+           StartCoroutine(Start()); 
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= GameSceneLoadt;
+    }
     private IEnumerator Start()
     {
         yield return null; //구독자들이 모든 구독을 마칠 수 있게 기다려줌

@@ -18,19 +18,15 @@ public class NotePrefab : MonoBehaviour //프리팹에 붙인다
 
     public void SetPool(NoteObjectPool pool) => this.pool = pool;
 
-    // [추가] 큐브가 생성된 DSP 시각
-                        private double _cubeSpawnDspTime; // 큐브가 실제로 생성된 DSP 시각
-    // [추가] 박자 타이밍 DSP 기준값
-                        private double _targetDspTime; // 이 큐브가 최대 크기가 되어야 하는 DSP 시각
+    
 
     private void Awake()
     {
         mr = this.GetComponent<Renderer>();
     }
 
-    //--> 여기서 박자 타이밍 DSP값과 현재 DSP값 받아와야 함
-    //원래는 finalSize랑 Speed만 있었음
-    public void NoteSizeUp(Vector3 finalcubesize, float Speed, double cubeSpawnDspTime, double targetDspTime)
+
+    public void NoteSizeUp(Vector3 finalcubesize, float duration)
     {
         //_targetDspTime = targetDspTime; // 박자 타이밍 DSP 기준값
         //_cubeSpawnDspTime = cubeSpawnDspTime; // 큐브 생성 DSP 기준값
@@ -38,21 +34,25 @@ public class NotePrefab : MonoBehaviour //프리팹에 붙인다
         if (gameObject.activeInHierarchy)
         {
             if(noteCreate_coroutine != null) StopCoroutine(noteCreate_coroutine);
-            noteCreate_coroutine = StartCoroutine(NoteSizeChange(finalcubesize, Speed, targetDspTime, cubeSpawnDspTime));
+            noteCreate_coroutine = StartCoroutine(NoteSizeChange(finalcubesize, duration));
         }
     }
 
-    IEnumerator NoteSizeChange(Vector3 finalcubesize, float Speed, double targetDspTime, double cubeSpawnDspTime)
+    IEnumerator NoteSizeChange(Vector3 finalcubesize, float duration)
     {
         float t = 0f;
-        float _duration = (float)(targetDspTime - _cubeSpawnDspTime);
+        Vector3 startScale = Vector3.zero;
 
-        transform.localScale = Vector3.zero;
-        while (t < _duration)
+        if(duration<=0)
+        {
+            transform.localScale = finalcubesize;
+            yield break;
+        }
+        while (t < duration)
         {
             t += Time.deltaTime;
-            transform.localScale = Vector3.Lerp(Vector3.zero, finalcubesize, t/ _duration);
-            if(t>= _duration * 0.7f)
+            transform.localScale = Vector3.Lerp(startScale, finalcubesize, t/ duration);
+            if(t >= duration * 0.9f)
             {
                 mr.material = target;
             }

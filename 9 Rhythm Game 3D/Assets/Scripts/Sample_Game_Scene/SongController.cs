@@ -42,17 +42,29 @@ public class SongController : MonoBehaviour
     private void Awake()
     {
         musicSource = GetComponent<AudioSource>();
-        sodata = SongSelectUI.UIinstance.list[SongSelectUI.UIinstance.cur];
-        musicSource.clip = sodata.music;
-        musicSource.volume = sodata.volume;
-        musicSource.loop = sodata.loop;
-        secPerBeat = 60f / sodata.BPM;
+    }
+
+    private void OnEnable()
+    {
+        _running = false;
+        _metronomePrimed = false;
+        _CubePrimed = false;
+        dspSongTime = 0;
     }
 
     void Start()
     {
+        sodata = SongSelectUI.UIinstance.list[SongSelectUI.UIinstance.cur];
         GameManager.instance.start += BeginSong;
-                secPerBeat = 60f / sodata.BPM;
+
+        if (sodata != null)
+        {
+            musicSource = GetComponent<AudioSource>();
+            musicSource.clip = sodata.music;
+            musicSource.volume = sodata.volume;
+            musicSource.loop = sodata.loop;
+            secPerBeat = 60f / sodata.BPM;
+        }
     }
 
     void BeginSong()
@@ -60,13 +72,17 @@ public class SongController : MonoBehaviour
         _running = true;
         _scheduledDspStart = AudioSettings.dspTime + 0.05f;
         dspSongTime = _scheduledDspStart;
-        //_lastMetronomeBeat = -1;
-        //_lastCubeBeat = -1;
+        _lastMetronomeBeat = -1;
+        _lastCubeBeat = -1;
+        _metronomePrimed = false;
+        _CubePrimed = false;
         musicSource.PlayScheduled(_scheduledDspStart);
     }
 
     void Update()
     {
+        if (!_running) return;
+
         CreateCube();
         CreateMetronome();
     }

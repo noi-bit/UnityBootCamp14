@@ -9,6 +9,8 @@ public class Metronome : MonoBehaviour
     [Header("Audio")]
     public AudioSource tik;
     public SongController songcontroller;
+    public NoteController NoteController;
+
 
     private void Start()
     {
@@ -22,8 +24,11 @@ public class Metronome : MonoBehaviour
             songcontroller.OnBeat -= Metronum;
     }
 
-    void Metronum(int onbeat)
+    void Metronum(int beatIndex)
     {
+        float beat = beatIndex - NoteController.beatOffset;
+        if (!Mathf.Approximately(beat % NoteController.spawnEveryNBeats, 0f)) return;
+
         tik.Play();
     }
 

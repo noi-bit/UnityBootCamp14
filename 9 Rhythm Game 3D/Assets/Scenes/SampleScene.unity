@@ -191,6 +191,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tik: {fileID: 333427845}
   songcontroller: {fileID: 1140375735}
+  NoteController: {fileID: 378154751}
 --- !u!4 &298392981
 Transform:
   m_ObjectHideFlags: 0
@@ -1795,16 +1796,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a871008f5e4cfd45b738702bf9facc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sodata: {fileID: 11400000, guid: f64deb1093414a34eaf0862aadd3e2a0, type: 2}
   musicSource: {fileID: 1140375737}
+  sodatanum: 0
   secPerBeat: 0
+  dspSongTime: 0
   songPosition: 0
   _lastMetronomeBeat: -1
   _lastCubeBeat: -1
   _isPaused: 0
   _PausedAtDsp: 0
-  nowCubetime: 0.5
-  _running: 0
+  nowCubetime: 1
+  _running: 1
 --- !u!4 &1140375736
 Transform:
   m_ObjectHideFlags: 0
