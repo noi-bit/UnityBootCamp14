@@ -9,16 +9,16 @@ public class SongController : MonoBehaviour
     public AudioSource musicSource;//음악을 재생할 이 게임오브젝트에 첨부된 AudioSource
 
     SO_data sodata;
-    public int sodatanum;
 
     [Tooltip("한 비트 길이(초). 60/BPM 자동 계산")]
     public float secPerBeat;//한 비트의 길이
     public double dspSongTime; //dspSongTime = _scheduledDspStart , 일시정지.재개 때 += 등으로 싱크 맞추는 용도
+    public float bpmValue = 1;
 
     [Tooltip("현재 곡 진행 시간(초, DSP 기준)")]
     [SerializeField] private float songPosition;//현재 노래위치
 
-   
+    public double nowDspTime;
     private double _scheduledDspStart;  //샘플-정확도 시작 시각 - DSPTime 저장, PlayScheduled로 예약된 시간/“처음 언제 틀기로 했나”라는 불변 레퍼런스
     private float songPositioninBeats;//박자 단위의 현재 노래위치 - float값으로
     [SerializeField] private int _lastMetronomeBeat; //마지막으로 발행한 정수 비트 인덱스 for 메트로눔
@@ -31,11 +31,12 @@ public class SongController : MonoBehaviour
 
     [Tooltip("큐브 나오는 오프셋 시간")]
     [Range(0f,5f)]public float nowCubetime;
+    public float metronomoffset;
 
     public Action<int> OnBeat;  //비트 바뀔 때 알림(선택사항)
     public Action<int> createCube;
     bool _metronomePrimed;
-    bool _CubePrimed;
+    //bool _CubePrimed;
 
     [SerializeField] private bool _running = false; //gamemanager가 호출하기 전까지는 update를 잠그는 변수
 
@@ -48,14 +49,15 @@ public class SongController : MonoBehaviour
     {
         _running = false;
         _metronomePrimed = false;
-        _CubePrimed = false;
+        //_CubePrimed = false;
         dspSongTime = 0;
     }
 
     void Start()
     {
         sodata = SongSelectUI.UIinstance.list[SongSelectUI.UIinstance.cur];
-        GameManager.instance.start += BeginSong;
+        GameManager.Instance.start += BeginSong;
+        LevelLoad();
 
         if (sodata != null)
         {
@@ -63,8 +65,9 @@ public class SongController : MonoBehaviour
             musicSource.clip = sodata.music;
             musicSource.volume = sodata.volume;
             musicSource.loop = sodata.loop;
-            secPerBeat = 60f / sodata.BPM;
+            secPerBeat = 60f / sodata.BPM * bpmValue;
         }
+
     }
 
     void BeginSong()
@@ -75,7 +78,7 @@ public class SongController : MonoBehaviour
         _lastMetronomeBeat = -1;
         _lastCubeBeat = -1;
         _metronomePrimed = false;
-        _CubePrimed = false;
+        //_CubePrimed = false;
         musicSource.PlayScheduled(_scheduledDspStart);
     }
 
@@ -83,80 +86,85 @@ public class SongController : MonoBehaviour
     {
         if (!_running) return;
 
-        CreateCube();
-        CreateMetronome();
+        double now = AudioSettings.dspTime;
+        double songPositionInSeconds = now - dspSongTime - sodata.firstBeatOffset;
+        nowDspTime = songPositionInSeconds;
+
+        if (songPositionInSeconds < 0) return;
+
+        //CreateCube();
+        //CreateMetronome(); 
+        CreateMetronome(songPositionInSeconds);
+        CreateCube(songPositionInSeconds);
     }
 
-    public void CreateMetronome()
+    private void CreateMetronome(double songPositionInSeconds)
     {
-        if (!_running) return;
-        double now = AudioSettings.dspTime;//이 값은 계속 커짐(시간이 지나니까)
-                    double posD = now - dspSongTime - sodata.firstBeatOffset;
-                    //결국 현재 dsptime - beginsong이 불려질때의 dsptime - offset이 0이 이상이 될 때부터 박자가 계산됨
-        
-        if (posD < 0) { _metronomePrimed = false; return; }
+        if(songPositionInSeconds < 0) { _metronomePrimed = false; return; }
 
-        float posSec = (float)posD; //posSec값은 시간이 지나면서 증가한다 - 플레이타임같은?
-        songPosition = posSec;
+        float songPositioninBeats = ((float)songPositionInSeconds- metronomoffset) / secPerBeat;
+        int currentBeat = Mathf.FloorToInt(songPositioninBeats);
 
-        songPositioninBeats = posSec / secPerBeat; //초->비트로 변환
-        int currentBeat = Mathf.FloorToInt(songPositioninBeats); //현재 곡이 진행된 박자 수
-
-        if (!_metronomePrimed)
+        if(!_metronomePrimed)
         {
-            _metronomePrimed = true;
-            _lastMetronomeBeat = currentBeat;  // 바로 이전 비트로 두지 말고 “현재”로 앵커
+            _metronomePrimed= true;
+            _lastMetronomeBeat = currentBeat;
             return;
         }
-        while (currentBeat > _lastMetronomeBeat) //비트 경계 통과 시점
+        while(currentBeat > _lastMetronomeBeat)
         {
-            _lastMetronomeBeat++; //마지막 비트 갱신
-            OnBeat?.Invoke(_lastMetronomeBeat); //외부로 콜백 -> 메트로눔 사운드
+            _lastMetronomeBeat++;
+            OnBeat?.Invoke(_lastMetronomeBeat);
         }
     }
 
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!여기 함수 체크하기!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    public void CreateCube()
+    private void CreateCube(double songPositionInSeconds)
     {
-        if (!_running) return;
-        double now = AudioSettings.dspTime;//이 값은 계속 커짐(시간이 지나니까)
-                    double posD = now - dspSongTime - sodata.firstBeatOffset - nowCubetime;
-                    //결국 현재 dsptime - beginsong이 불려질때의 dsptime - offset이 0이 이상이 될 때부터 박자가 계산됨
-        
-        if (posD < 0) { _CubePrimed = false; return; }
+        float nextCubeBeatTime = (_lastCubeBeat + 1) * secPerBeat;//다음에 생성할 큐브의 비트 시간을 계산함
 
-        float posSec = (float)posD; //posSec값은 시간이 지나면서 증가한다 - 플레이타임같은?
-        float cubesongPosition = posSec;
-        //songPosition = (float)posD;
-        float cubesongPositioninBeats = posSec / secPerBeat; //초->비트로 변환
-        int currentBeat = Mathf.FloorToInt(cubesongPositioninBeats); //현재 곡이 진행된 박자 수
+        //다음 큐브를 생성해야 할 실제 시간(스폰시간) 을 계산 -> 다음 메트로눔이 10초에 울리고, 큐브를 2초 일찍 생성하게 해야한다면
+        //8초에 생성하게 해야 함
+        float spawnTime = nextCubeBeatTime - nowCubetime;
 
-        if (!_CubePrimed)
+        //현재 음악이 큐브를 생성해야 할 시간에 도달했거나 지났는지 확인
+        //while루프를 사용하여 프레임 드랍으로 여러 비트를 놓쳤을 때도 모두 생성하도록 함
+        while(songPositionInSeconds >= spawnTime)
         {
-            _CubePrimed = true;
-            _lastCubeBeat = currentBeat;  // 바로 이전 비트로 두지 말고 “현재”로 앵커
-            return;
+            _lastCubeBeat++;
+            createCube?.Invoke(_lastCubeBeat); //이때 큐브 생성 이벤트 호출
+
+            //다음 루프를 위해 다음 큐브의 스폰 시간을 다시 계산한다?
+            nextCubeBeatTime = (_lastCubeBeat + 1) * secPerBeat;
+            spawnTime = nextCubeBeatTime - nowCubetime;
         }
-        while (currentBeat > _lastCubeBeat) //비트 경계 통과 시점
+    }
+
+    public void LevelLoad()
+    {
+        switch (SongSelectUI.UIinstance.dropdownlevel)
         {
-            _lastCubeBeat++; //마지막 비트 갱신
-                                createCube?.Invoke(_lastCubeBeat);
+            case EnumData.LV.supereasy:
+                bpmValue = 4f;
+                break;
+            case EnumData.LV.easy:
+                bpmValue = 2f;
+                break;
+            case EnumData.LV.normal:
+                bpmValue = 1;
+                break;
+            case EnumData.LV.hard:
+                bpmValue = 0.5f;
+                break;
         }
     }
 
     // [추가] 씬 전환/파괴 시 구독 해제 (중복/누수 방지)
     private void OnDestroy()
     {
-        if (GameManager.instance != null)
-            GameManager.instance.start -= BeginSong;
+        if (GameManager.Instance != null)
+            GameManager.Instance.start -= BeginSong;
     }
-    //public void SeekToBeat(float beat)
-    //{
-    //    float targetTime = beat * secPerBeat + sodata.firstBeatOffset;
-    //    musicSource.time = Mathf.Max(0f, targetTime);
-    //    dspSongTime = (float)AudioSettings.dspTime - (musicSource.time - sodata.firstBeatOffset);
-    //    _lastBeat = Mathf.FloorToInt(beat) - 1;
-    //}
+
     public void Pause()
     {
         if (_isPaused) return;

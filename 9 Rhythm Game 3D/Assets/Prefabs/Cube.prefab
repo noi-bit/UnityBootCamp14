@@ -152,3 +152,4 @@ MonoBehaviour:
   original: {fileID: 2100000, guid: 6811c9551acd45b4b905bb17842ee5ba, type: 2}
   target: {fileID: 2100000, guid: 383ed0a199741e041b2bf5d4e2dca511, type: 2}
   Notedeletevalue: 0.007
+  noteReturnOn: 0

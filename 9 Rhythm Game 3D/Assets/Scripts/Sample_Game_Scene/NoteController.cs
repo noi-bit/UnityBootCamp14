@@ -24,8 +24,7 @@ public class NoteController : MonoBehaviour
 
     private void Start() //구독 추가
     {
-      
-        LevelLoad();
+        //LevelLoad();
         if (pool == null) pool = FindAnyObjectByType<NoteObjectPool>();
         songController.createCube += Test;
         //Notdeletespeed = songController.songBpm * 0.003f;     <--이건 NotePrefab 스크립트에, 여기서만 OnBeat 구독하고, 비트 규칙(beatOffset, spawnEveryNBeats) 체크하고 스폰
@@ -46,31 +45,10 @@ public class NoteController : MonoBehaviour
 
         go.transform.localScale = Vector3.zero;
 
-        Debug.Log(go.transform.localScale);
-
         var nc = go.GetComponent<NotePrefab>();
 
         nc.NoteSizeUp(new Vector3(1.25f,0.5f,1.25f), songController.nowCubetime);
         //nc.SetLifeByBpm(songController.sodata.BPM);
-    }
-
-    public void LevelLoad()
-    {
-        switch(SongSelectUI.UIinstance.dropdownlevel)
-        {
-            case LV.supereasy:
-                spawnEveryNBeats = 4;
-                break;
-            case LV.easy:
-                spawnEveryNBeats = 2;
-                break;
-            case LV.normal:
-                spawnEveryNBeats = 1;
-                break;
-            case LV.hard:
-                spawnEveryNBeats = 0.5f;
-                break;
-        }
     }
 
     private void OnDisable()
@@ -79,7 +57,7 @@ public class NoteController : MonoBehaviour
             songController.createCube -= Test;
     }
 
-    void ReturnPool() => pool.Return(gameObject);
+    //void ReturnPool() => pool.Return(gameObject);
     #endregion
 
 }

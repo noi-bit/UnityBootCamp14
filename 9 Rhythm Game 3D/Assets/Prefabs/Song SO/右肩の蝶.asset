@@ -15,8 +15,7 @@ MonoBehaviour:
   CoverImage: {fileID: 21300000, guid: 8208aa8bdaba4bb4b828159ab265c651, type: 3}
   SongName: Butterfly on your Right Shoulder
   music: {fileID: 8300000, guid: 1dfd52ffbdc335f4ab70d05f62d6855b, type: 3}
-  firstBeatOffset: -0.12
-  level: 1
+  firstBeatOffset: 0
   loop: 0
   volume: 1
   BPM: 140

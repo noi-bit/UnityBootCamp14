@@ -30,7 +30,6 @@ public class NoteObjectPool : MonoBehaviour
             if (!go.activeInHierarchy)
             {
                 go.SetActive(true);
-                Debug.Log("GetNote" + go.transform.localScale); 
 
                 return go;
             }
@@ -45,7 +44,7 @@ public class NoteObjectPool : MonoBehaviour
 
     public void Return(GameObject note)
     {
-        //note.transform.localScale = new Vector3(0.1f, 0.5f, 0.1f);
+        note.transform.localScale = Vector3.zero;
         note.SetActive(false);
     }
 }

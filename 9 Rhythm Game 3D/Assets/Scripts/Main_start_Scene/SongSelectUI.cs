@@ -13,7 +13,9 @@ public class SongSelectUI : MonoBehaviour
     public static SongSelectUI UIinstance;
     public SO_data[] list;
     public int cur = 0;
-    public LV dropdownlevel;
+    public Button Gamestart;
+
+    public EnumData.LV dropdownlevel;
 
     void Awake()
     {
@@ -23,9 +25,15 @@ public class SongSelectUI : MonoBehaviour
         dropdown.onValueChanged.AddListener(OndropDownEvent);
     }
 
+    private void Start()
+    {
+        Gamestart.onClick.AddListener(StopMusicUI);
+        Gamestart.onClick.AddListener(GoGame);
+    }
+
     public void OndropDownEvent(int index)
     {
-        dropdownlevel = (LV)index;
+        dropdownlevel = (EnumData.LV)index;
     }
 
     public void LoadUI()
@@ -59,5 +67,10 @@ public class SongSelectUI : MonoBehaviour
     public void StopMusicUI()
     {
         previewMusic.Stop();
+    }
+
+    public void GoGame()
+    {
+        GameManager.MoveScene.LoadGameScene();
     }
 }

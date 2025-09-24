@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using Unity.VisualScripting;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class NotePrefab : MonoBehaviour //프리팹에 붙인다
@@ -12,30 +13,43 @@ public class NotePrefab : MonoBehaviour //프리팹에 붙인다
     private Coroutine noteLife_coroutine;
     private Coroutine noteCreate_coroutine;
 
-    private float Notedeletespeed;
-    public float Notedeletevalue = 0.003f;
-    //public float NotecreateSpeed;
-
     public void SetPool(NoteObjectPool pool) => this.pool = pool;
 
-    
+    //점수로직
+    public bool noteReturnOn = false;
+    SongController SC;
+    ScoreJudgeManger SJ;
+    PADcontroller PC;
+    //점수로직
 
-    private void Awake()
+    private void Start()
     {
         mr = this.GetComponent<Renderer>();
+        if (SC == null)
+            SC = FindFirstObjectByType<SongController>();
+        if (SJ == null)
+            SJ = FindFirstObjectByType<ScoreJudgeManger>();
+        if (PC == null)
+            PC = FindFirstObjectByType<PADcontroller>();
     }
 
 
     public void NoteSizeUp(Vector3 finalcubesize, float duration)
     {
-        //_targetDspTime = targetDspTime; // 박자 타이밍 DSP 기준값
-        //_cubeSpawnDspTime = cubeSpawnDspTime; // 큐브 생성 DSP 기준값
 
         if (gameObject.activeInHierarchy)
         {
             if(noteCreate_coroutine != null) StopCoroutine(noteCreate_coroutine);
             noteCreate_coroutine = StartCoroutine(NoteSizeChange(finalcubesize, duration));
+            if (noteLife_coroutine != null) StopCoroutine(noteLife_coroutine);
+            noteLife_coroutine = StartCoroutine(NoteMissCheck(duration * 1.4f));
         }
+    }
+
+    IEnumerator NoteMissCheck(float life)
+    {
+        yield return new WaitForSeconds(life);
+        NoteDie();
     }
 
     IEnumerator NoteSizeChange(Vector3 finalcubesize, float duration)
@@ -59,33 +73,32 @@ public class NotePrefab : MonoBehaviour //프리팹에 붙인다
             yield return null;
         }
         transform.localScale = finalcubesize;
-                        //mr.material = target;
-    }
-
-    public void SetLifeByBpm(float bpm) //NoteController 에서 호출
-    {
-        Notedeletespeed = bpm * Notedeletevalue;
-        if(gameObject.activeInHierarchy)
-        {
-            if (noteLife_coroutine != null) StopCoroutine(noteLife_coroutine);
-            noteLife_coroutine = StartCoroutine(NoteReturn(Notedeletespeed));
-        }
-    }
-
-    IEnumerator NoteReturn(float life)
-    {
-        yield return new WaitForSeconds(life);
-        ReturnPool();
+                        
     }
 
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("PAD"))
         {
-            Debug.Log("노트충돌일어남");
+            //noteReturnOn = true;
             /*여기 챙! 하고 소리 넣기*/
+            double hitSec = (SC != null) ? SC.nowDspTime : 0.0;
+            if(SC != null)
+            {
+                var(notemode, errorMs) = SJ.EvaluateHit(hitSec);
+                PC.NoteHitTiming(notemode);
+            }
             ReturnPool();
+            //noteReturnOn = false;
+
+            //여기서 리턴풀이 일어난 시간을 계산?
         }
+    }
+
+    void NoteDie()
+    {
+        ReturnPool();
+        PC.NoteHitTiming(EnumData.NotePressMode.Miss);
     }
 
     void ReturnPool()
