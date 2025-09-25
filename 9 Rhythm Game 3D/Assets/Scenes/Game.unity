@@ -2333,8 +2333,8 @@ MonoBehaviour:
   _lastCubeBeat: -1
   _isPaused: 0
   _PausedAtDsp: 0
-  nowCubetime: 1
-  metronomoffset: 0.05
+  nowCubetime: 3
+  metronomoffset: 0
   _running: 1
 --- !u!4 &1140375736
 Transform:

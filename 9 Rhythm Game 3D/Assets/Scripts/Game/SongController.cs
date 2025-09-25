@@ -73,12 +73,19 @@ public class SongController : MonoBehaviour
     void BeginSong()
     {
         _running = true;
-        _scheduledDspStart = AudioSettings.dspTime + 0.05f;
-        dspSongTime = _scheduledDspStart;
+
+        double now = AudioSettings.dspTime;
+        double safety = 0.1; // 예약 여유
+        double wantDelay = nowCubetime - sodata.firstBeatOffset; // "큐브 피크 = 첫 박" 정렬
+        double delay = Math.Max(safety, wantDelay);              // 과거로 예약 못하니 최소 safety 확보
+
+        _scheduledDspStart = now + delay;
+        dspSongTime = _scheduledDspStart; // 이 시점을 '노래 0초'로 본다
+
         _lastMetronomeBeat = -1;
         _lastCubeBeat = -1;
         _metronomePrimed = false;
-        //_CubePrimed = false;
+
         musicSource.PlayScheduled(_scheduledDspStart);
     }
 
@@ -87,14 +94,13 @@ public class SongController : MonoBehaviour
         if (!_running) return;
 
         double now = AudioSettings.dspTime;
-        double songPositionInSeconds = now - dspSongTime - sodata.firstBeatOffset;
+        double songPositionInSeconds = now - dspSongTime - sodata.firstBeatOffset-0.01f; // 첫 박 기준 위치(초)
         nowDspTime = songPositionInSeconds;
 
-        if (songPositionInSeconds < 0) return;
-
-        //CreateCube();
-        //CreateMetronome(); 
+        // 메트로놈은 첫 박 이전엔 울리면 안 됨 → 내부에서 음수면 리턴
         CreateMetronome(songPositionInSeconds);
+
+        // 큐브는 첫 박 이전에도 '미리' 나와야 함 → 음수라도 호출해야 함
         CreateCube(songPositionInSeconds);
     }
 
@@ -102,7 +108,7 @@ public class SongController : MonoBehaviour
     {
         if(songPositionInSeconds < 0) { _metronomePrimed = false; return; }
 
-        float songPositioninBeats = ((float)songPositionInSeconds- metronomoffset) / secPerBeat;
+        float songPositioninBeats = ((float)songPositionInSeconds/*- metronomoffset*/) / secPerBeat;
         int currentBeat = Mathf.FloorToInt(songPositioninBeats);
 
         if(!_metronomePrimed)
