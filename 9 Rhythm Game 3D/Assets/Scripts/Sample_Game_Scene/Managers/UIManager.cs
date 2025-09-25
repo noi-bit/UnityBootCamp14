@@ -47,13 +47,13 @@ public class UIManager : MonoBehaviour
         if(ScoreSlider.value == ScoreSlider.minValue)
         {
             GameManager.Instance.nowstats = EnumData.GameStatus.GameOver;
+            GameOverCanvas.gameObject.SetActive(true);
         }
     }
 
     public void Sliderdefault()
     {
         ScoreSlider.value -= Time.deltaTime * defalutdown;
-        GameOverCanvas.gameObject.SetActive(true);
     }
 
     public void SliderScore(float score)

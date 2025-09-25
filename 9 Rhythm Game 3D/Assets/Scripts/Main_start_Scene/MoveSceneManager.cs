@@ -5,7 +5,7 @@ public class MoveSceneManager
 {
     public void LoadGameScene()
     {
-        SceneManager.LoadScene("SampleScene"); //∞‘¿”æ¿
+        SceneManager.LoadScene("Game"); //∞‘¿”æ¿
         GameManager.Instance.nowstats = EnumData.GameStatus.inGame;
     }
 

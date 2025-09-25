@@ -120,15 +120,12 @@ public class SongController : MonoBehaviour
 
     private void CreateCube(double songPositionInSeconds)
     {
-        float nextCubeBeatTime = (_lastCubeBeat + 1) * secPerBeat;//다음에 생성할 큐브의 비트 시간을 계산함
-
-        //다음 큐브를 생성해야 할 실제 시간(스폰시간) 을 계산 -> 다음 메트로눔이 10초에 울리고, 큐브를 2초 일찍 생성하게 해야한다면
-        //8초에 생성하게 해야 함
+        double adjustedSongPosition = songPositionInSeconds;
+        float nextCubeBeatTime = (_lastCubeBeat + 1) * secPerBeat;
         float spawnTime = nextCubeBeatTime - nowCubetime;
 
-        //현재 음악이 큐브를 생성해야 할 시간에 도달했거나 지났는지 확인
-        //while루프를 사용하여 프레임 드랍으로 여러 비트를 놓쳤을 때도 모두 생성하도록 함
-        while(songPositionInSeconds >= spawnTime)
+
+        while(adjustedSongPosition >= spawnTime)
         {
             _lastCubeBeat++;
             createCube?.Invoke(_lastCubeBeat); //이때 큐브 생성 이벤트 호출

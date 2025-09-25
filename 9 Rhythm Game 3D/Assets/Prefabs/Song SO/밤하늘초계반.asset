@@ -18,4 +18,4 @@ MonoBehaviour:
   firstBeatOffset: 1.5
   loop: 0
   volume: 1
-  BPM: 185
+  BPM: 0.5

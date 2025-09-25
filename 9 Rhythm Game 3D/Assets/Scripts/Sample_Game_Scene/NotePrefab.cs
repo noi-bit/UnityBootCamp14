@@ -7,6 +7,7 @@ using UnityEngine;
 public class NotePrefab : MonoBehaviour //프리팹에 붙인다
 {
     Renderer mr;
+    public AudioSource crushSound;
     public Material original;
     public Material target;
     private NoteObjectPool pool;
@@ -80,8 +81,8 @@ public class NotePrefab : MonoBehaviour //프리팹에 붙인다
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("PAD"))
         {
-            //noteReturnOn = true;
-            /*여기 챙! 하고 소리 넣기*/
+            crushSound.PlayOneShot(crushSound.clip);
+
             double hitSec = (SC != null) ? SC.nowDspTime : 0.0;
             if(SC != null)
             {
@@ -89,9 +90,6 @@ public class NotePrefab : MonoBehaviour //프리팹에 붙인다
                 PC.NoteHitTiming(notemode);
             }
             ReturnPool();
-            //noteReturnOn = false;
-
-            //여기서 리턴풀이 일어난 시간을 계산?
         }
     }
 

@@ -17,5 +17,5 @@ MonoBehaviour:
   music: {fileID: 8300000, guid: 1777a97e728f61c499d1cdcc50d0da69, type: 3}
   firstBeatOffset: 0.91
   loop: 0
-  volume: 1
+  volume: 0.5
   BPM: 137
