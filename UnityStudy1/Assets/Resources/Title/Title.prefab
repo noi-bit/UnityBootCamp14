@@ -415,7 +415,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TitleManager
   LogoAnim: {fileID: 2598050423054792232}
   LogoText: {fileID: 985941267436909717}
-  Title: {fileID: 9137852999723787213}
+  _title: {fileID: 0}
+  _loadingSlider: {fileID: 0}
+  _loadingProgressText: {fileID: 0}
 --- !u!1 &3944837077354206976
 GameObject:
   m_ObjectHideFlags: 0
@@ -793,7 +795,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 230}
+  m_AnchoredPosition: {x: 0, y: -0.000015259}
   m_SizeDelta: {x: 500, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5568004276593591400
@@ -1033,8 +1035,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -170.8}
-  m_SizeDelta: {x: 700, y: 300}
+  m_AnchoredPosition: {x: 0, y: -455}
+  m_SizeDelta: {x: 700, y: 168.17}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2870725951794567543
 CanvasRenderer:
@@ -1091,15 +1093,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 96.8
-  m_fontSizeBase: 96.8
+  m_fontSize: 94
+  m_fontSizeBase: 94
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0

@@ -8,8 +8,10 @@ public class PADcontroller : MonoBehaviour
     public KeyCode ButtonKey; //이 인풋을받아서
     public float pushValue; //얼마나 누를건지
     public UIManager _uimanager;
+    //public NoteController _noteController;
 
     bool pressed;
+    public bool _gamegetstart = true;
 
     Rigidbody rb;
 
@@ -28,6 +30,7 @@ public class PADcontroller : MonoBehaviour
 
     void Update()
     {
+        if (_gamegetstart == false) return;
         if (Input.GetKeyDown(ButtonKey)) pressed = true;
         if (Input.GetKeyUp(ButtonKey)) pressed = false;
     }
@@ -44,22 +47,25 @@ public class PADcontroller : MonoBehaviour
         {
             case EnumData.NotePressMode.Miss:
                 _uimanager.SliderScore(-10);
-                _uimanager.ErrorMSText.color = Color.red;
+                _uimanager.JudgeText.color = Color.red;
                 _uimanager.SeterrorMsText(pressmode);
                 break;
+
             case EnumData.NotePressMode.Good:
                 _uimanager.SliderScore(3);
-                _uimanager.ErrorMSText.color = Color.orange;
+                _uimanager.JudgeText.color = Color.orange;
                 _uimanager.SeterrorMsText(pressmode);
                 break;
+
             case EnumData.NotePressMode.Great:
                 _uimanager.SliderScore(5);
-                _uimanager.ErrorMSText.color = Color.aliceBlue;
+                _uimanager.JudgeText.color = Color.yellow;
                 _uimanager.SeterrorMsText(pressmode);
                 break;
+
             case EnumData.NotePressMode.Perfect:
                 _uimanager.SliderScore(10);
-                _uimanager.ErrorMSText.color = Color.greenYellow;
+                _uimanager.JudgeText.color = Color.green;
                 _uimanager.SeterrorMsText(pressmode);
                 break;
         }

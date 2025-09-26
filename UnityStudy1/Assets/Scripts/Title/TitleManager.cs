@@ -25,6 +25,16 @@ public class TitleManager : MonoBehaviour
 
     private void Start()
     {
+        //유저데이터 로드
+        UserDataManager.instance.LoadUserData();
+
+        //저장된 유저데이터가 없으면 기본값으로 세팅 후 저장
+        if(UserDataManager.instance.ExistsSaveData == false)
+        {
+            UserDataManager.instance.SetDefaultUserData();
+            UserDataManager.instance.SaveUserData();
+        }
+
         StartCoroutine(LoadGameCoroutine());
     }
 
@@ -45,7 +55,7 @@ public class TitleManager : MonoBehaviour
             yield break;
         }
 
-        _asyncOperation.allowSceneActivation = false; //0.1~0.8 -> 씬이동을 자동으로 함, 그걸 막기 위해
+        _asyncOperation.allowSceneActivation = false; //0.1~0.9 -> true 일때 씬이동을 자동으로 함, 그걸 막기 위해
 
         //_loadingSlider.value = 0.5f;
         _loadingProgressText.text = ((int)(_loadingSlider.value * 100)).ToString();
@@ -53,7 +63,7 @@ public class TitleManager : MonoBehaviour
 
         while(_asyncOperation.isDone == false)
         {
-            _loadingSlider.value = _asyncOperation.progress; //< 0.5f ? 0.5f : _asyncOperation.progress;
+            _loadingSlider.value = _asyncOperation.progress; //0.9가 끝
             _loadingProgressText.text = ((int)(_loadingSlider.value * 100)).ToString(); 
             
             //씬 로딩이 완료되었다면 코루틴 끄고 이동하기

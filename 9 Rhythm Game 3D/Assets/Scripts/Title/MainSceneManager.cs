@@ -13,7 +13,6 @@ public class MainSceneManager : MonoBehaviour
     public Button SongSelect;
     public Vector3 Selectlastposition;
     //public Button GameStart;
-    
 
     void Start()
     {

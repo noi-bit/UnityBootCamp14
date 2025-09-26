@@ -1,6 +1,6 @@
 using System.Collections;
+using TMPro;
 using Unity.VisualScripting;
-using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,9 +8,11 @@ public class UIManager : MonoBehaviour
 {
     public Text TimerText;
     public Text ScoreText;
-    public Text ErrorMSText;
+    public TextMeshProUGUI JudgeText;
     public Slider ScoreSlider;
     public Canvas GameOverCanvas;
+    public PADcontroller[] pad;
+    public SongController SongController;
 
     private float defalutdown = 1f;
     float scoreV = 0;
@@ -47,7 +49,10 @@ public class UIManager : MonoBehaviour
         if(ScoreSlider.value == ScoreSlider.minValue)
         {
             GameManager.Instance.nowstats = EnumData.GameStatus.GameOver;
+            for (int i = 0; i < pad.Length; i++)
+            { pad[i]._gamegetstart = false; }
             GameOverCanvas.gameObject.SetActive(true);
+            SongController.Pause();
         }
     }
 
@@ -65,6 +70,6 @@ public class UIManager : MonoBehaviour
 
     public void SeterrorMsText(EnumData.NotePressMode pressMode)
     {
-        ErrorMSText.text =$"{pressMode.ToString()}!!";
+        JudgeText.text =$"{pressMode.ToString()}!!";
     }
 }

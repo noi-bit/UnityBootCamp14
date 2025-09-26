@@ -63,8 +63,8 @@ public class SongController : MonoBehaviour
         {
             musicSource = GetComponent<AudioSource>();
             musicSource.clip = sodata.music;
-            musicSource.volume = sodata.volume;
-            musicSource.loop = sodata.loop;
+            //musicSource.volume = sodata.volume;
+            //musicSource.loop = sodata.loop;
             secPerBeat = 60f / sodata.BPM * bpmValue;
         }
 

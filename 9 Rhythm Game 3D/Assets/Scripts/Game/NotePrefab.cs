@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using Unity.VisualScripting;
-using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class NotePrefab : MonoBehaviour //프리팹에 붙인다
@@ -81,7 +80,7 @@ public class NotePrefab : MonoBehaviour //프리팹에 붙인다
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("PAD"))
         {
-            crushSound.PlayOneShot(crushSound.clip);
+            //crushSound.PlayOneShot(crushSound.clip);
 
             double hitSec = (SC != null) ? SC.nowDspTime : 0.0;
             if(SC != null)
