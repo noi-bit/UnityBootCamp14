@@ -18,9 +18,9 @@ public class EnumData
         Perfect
     }
 
-    public enum GameStatus
+    public enum Scene
     {
-        Lobby,
+        inTitle,
         inGame,
         GameOver
     }
