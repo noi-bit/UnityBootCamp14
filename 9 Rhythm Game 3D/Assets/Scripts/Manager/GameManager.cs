@@ -55,25 +55,11 @@ public class GameManager : MonoBehaviour
 
     private void OnEnable()
     {
-        //nowstats = EnumData.Scene.inTitle;
-        //SceneManager.sceneLoaded += GameSceneLoad;
     }
-
-    //private void GameSceneLoad(Scene scene, LoadSceneMode mode)
-    //{
-    //    if(scene.buildIndex ==2)
-    //       StartCoroutine(_Start()); 
-    //}
 
     private void OnDisable()
     {
-        //SceneManager.sceneLoaded -= GameSceneLoad;
     }
-    //private IEnumerator _Start()
-    //{
-    //    yield return null; //구독자들이 모든 구독을 마칠 수 있게 기다려줌
-    //            //yield return new WaitForSecondsRealtime(Globaldelay);
-    //}
 
     public static void Clear()
     {

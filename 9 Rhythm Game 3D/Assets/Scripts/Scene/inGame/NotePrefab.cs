@@ -6,7 +6,7 @@ using UnityEngine;
 public class NotePrefab : MonoBehaviour //프리팹에 붙인다
 {
     Renderer mr;
-    public AudioSource crushSound;
+    //public AudioSource crushSound;
     public Material original;
     public Material target;
     private NoteObjectPool pool;
