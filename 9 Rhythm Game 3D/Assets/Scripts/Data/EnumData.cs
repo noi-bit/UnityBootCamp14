@@ -20,8 +20,8 @@ public class EnumData
 
     public enum Scene
     {
-        inTitle,
-        inGame,
+        Title,
+        Game,
         GameOver
     }
 }

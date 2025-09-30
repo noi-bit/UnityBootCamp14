@@ -2,13 +2,8 @@ using UnityEngine;
 
 public class ResourceManager
 {
-    void Start()
+    public T[] LoadAll<T>(string path) where T : Object
     {
-        
-    }
-
-    void Update()
-    {
-        
+        return Resources.LoadAll<T>(path); ;
     }
 }

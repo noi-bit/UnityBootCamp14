@@ -53,22 +53,22 @@ public class SongController : MonoBehaviour
         dspSongTime = 0;
     }
 
-    void Start()
-    {
-        sodata = SongSelectUI.UIinstance.list[SongSelectUI.UIinstance.cur];
-        //GameManager.Instance.start += BeginSong;
-        LevelLoad();
+    //void Start()
+    //{
+    //    sodata = SelectCanvas.UIinstance.list[SelectCanvas.UIinstance.cur];
+    //    //GameManager.Instance.start += BeginSong;
+    //    LevelLoad();
 
-        if (sodata != null)
-        {
-            musicSource = GetComponent<AudioSource>();
-            musicSource.clip = sodata.music;
-            //musicSource.volume = sodata.volume;
-            //musicSource.loop = sodata.loop;
-            secPerBeat = 60f / sodata.BPM * bpmValue;
-        }
+    //    if (sodata != null)
+    //    {
+    //        musicSource = GetComponent<AudioSource>();
+    //        musicSource.clip = sodata.music;
+    //        //musicSource.volume = sodata.volume;
+    //        //musicSource.loop = sodata.loop;
+    //        secPerBeat = 60f / sodata.BPM * bpmValue;
+    //    }
 
-    }
+    //}
 
     void BeginSong()
     {
@@ -143,24 +143,24 @@ public class SongController : MonoBehaviour
         }
     }
 
-    public void LevelLoad()
-    {
-        switch (SongSelectUI.UIinstance.dropdownlevel)
-        {
-            case EnumData.LV.supereasy:
-                bpmValue = 4f;
-                break;
-            case EnumData.LV.easy:
-                bpmValue = 2f;
-                break;
-            case EnumData.LV.normal:
-                bpmValue = 1;
-                break;
-            case EnumData.LV.hard:
-                bpmValue = 0.5f;
-                break;
-        }
-    }
+    //public void LevelLoad()
+    //{
+    //    switch (SelectCanvas.UIinstance.dropdownlevel)
+    //    {
+    //        case EnumData.LV.supereasy:
+    //            bpmValue = 4f;
+    //            break;
+    //        case EnumData.LV.easy:
+    //            bpmValue = 2f;
+    //            break;
+    //        case EnumData.LV.normal:
+    //            bpmValue = 1;
+    //            break;
+    //        case EnumData.LV.hard:
+    //            bpmValue = 0.5f;
+    //            break;
+    //    }
+    //}
 
     // [추가] 씬 전환/파괴 시 구독 해제 (중복/누수 방지)
     //private void OnDestroy()

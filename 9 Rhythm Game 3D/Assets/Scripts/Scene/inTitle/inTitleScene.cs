@@ -3,17 +3,20 @@ using UnityEngine.UI;
 
 public class inTitleScene : BaseScene
 {
+    [Header("UI Reference")]
     public Button Button_select;
-    private Canvas selectCanvas;
+
+    private SelectCanvas selectCanvas;
     private bool isSelectCanvasActive = false;
 
     protected override void Init()
     {
         base.Init();
 
-        SceneType = EnumData.Scene.inTitle;
+        SceneType = EnumData.Scene.Title;
         FindSelectCanvas();
         ButtonSetting();
+        selectCanvas.goGame += MoveScene;
     }
     private void FindSelectCanvas()
     {
@@ -21,21 +24,22 @@ public class inTitleScene : BaseScene
         GameObject selectCanvasGO = GameObject.Find("SelectCanvas");
         if (selectCanvasGO != null)
         {
-            selectCanvas = selectCanvasGO.GetComponent<Canvas>();
+            selectCanvas = selectCanvasGO.GetComponent<SelectCanvas>();
             // 초기 상태 저장
-            isSelectCanvasActive = selectCanvasGO.activeSelf;
+            //isSelectCanvasActive = selectCanvasGO.activeSelf;
+            selectCanvas.gameObject.SetActive(isSelectCanvasActive);
         }
         else
         {
             Debug.LogError("SelectCanvas를 찾을 수 없습니다!");
         }
     }
-
+    
     void ButtonSetting()
     {
         if (Button_select != null)
         {
-            Button_select.onClick.RemoveAllListeners();
+            Button_select.onClick.RemoveAllListeners(); //한번 지워주고
             Button_select.onClick.AddListener(ToggleSelectCanvas);
             //Button_select.onClick.AddListener(MoveScene);
         }
@@ -61,12 +65,16 @@ public class inTitleScene : BaseScene
     protected override void MoveScene()
     {
         base.MoveScene();
-        GameManager.MoveScene.LoadScene(EnumData.Scene.inGame);
+        GameManager.MoveScene.LoadScene(EnumData.Scene.Game);
     }
 
     public override void Clear()
     {
         Debug.Log($"{SceneType} Clear 완료");
+    }
+    private void OnDestroy()
+    {
+        selectCanvas.goGame -= MoveScene;
     }
 
 }

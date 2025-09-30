@@ -25,7 +25,7 @@ public class GameoverUI : MonoBehaviour
 
     private void GoTitle()
     {
-        GameManager.MoveScene.LoadScene((int)EnumData.Scene.inTitle);
+        GameManager.MoveScene.LoadScene((int)EnumData.Scene.Title);
     }
 
    

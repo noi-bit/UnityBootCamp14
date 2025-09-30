@@ -17,7 +17,6 @@ public class GameManager : MonoBehaviour
     public static ResourceManager Resources { get { return Instance._resources; } }
 
                                     //얘는 게임 시작할때만 딜레이가 생기는거니까? 여기없어도될듯?
-                                    [Tooltip("게임 전체 시작 전 딜레이")]
                                     //public float Globaldelay=4f;
                                     //public Action start;
     //public EnumData.Scene nowstats;
@@ -45,6 +44,7 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(go);
             _instance = go.GetComponent<GameManager>();
 
+            //MoveScene.cl
             /*
              각 매니저마다의 초기화
              

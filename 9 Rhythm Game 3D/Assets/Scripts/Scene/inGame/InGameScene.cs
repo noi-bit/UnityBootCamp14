@@ -1,14 +1,20 @@
 using UnityEngine;
 
-public class InGameScene : MonoBehaviour
+public class inGameScene : BaseScene
 {
-    void Start()
+    protected override void Init()
     {
-        
+        base.Init();
+
     }
+   
 
     void Update()
     {
         
+    }
+    public override void Clear()
+    {
+        throw new System.NotImplementedException();
     }
 }
