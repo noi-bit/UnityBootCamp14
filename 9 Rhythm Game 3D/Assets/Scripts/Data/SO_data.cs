@@ -14,5 +14,6 @@ public class SO_data : ScriptableObject
     //public bool loop = false;
     //public float volume = 1f;
     public float BPM;
+    public EnumData.LV level;
 }
 

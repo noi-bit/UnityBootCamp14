@@ -4,6 +4,7 @@ using System.Resources;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Windows;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,14 +12,19 @@ public class GameManager : MonoBehaviour
     private static GameManager _instance;
     private MoveSceneManager _movescene = new MoveSceneManager();
     private ResourceManager _resources = new ResourceManager();
-
+    private SongManager _songmanager = new SongManager();
+    //private InputManager _inputmanager = new InputManager();    
     public static GameManager Instance { get { Init(); return _instance; } }
     public static MoveSceneManager MoveScene { get { return Instance._movescene; } }
     public static ResourceManager Resources { get { return Instance._resources; } }
+    public static SongManager Song { get { return Instance._songmanager; } }
+    //public static InputManager InputManager { get { return Instance._inputmanager; } }
 
-                                    //얘는 게임 시작할때만 딜레이가 생기는거니까? 여기없어도될듯?
-                                    //public float Globaldelay=4f;
-                                    //public Action start;
+    public static bool _isGameStart;
+
+    //얘는 게임 시작할때만 딜레이가 생기는거니까? 여기없어도될듯?
+    //public float Globaldelay=4f;
+    //public Action start;
     //public EnumData.Scene nowstats;
 
     void Start()
@@ -27,7 +33,7 @@ public class GameManager : MonoBehaviour
     }
     void Update()
     {
-        
+        //_inputmanager.OnUpdate();
     }
 
     static void Init()

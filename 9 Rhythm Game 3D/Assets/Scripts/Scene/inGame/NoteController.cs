@@ -10,7 +10,7 @@ public class NoteController : MonoBehaviour
     public GameObject note; //큐브(노트)를 의미한다
     public GameObject[] cubeposition; //새로 랜덤생성되는 노트 위치 정보가 담긴 오브젝트 배열(패드)
     public SongController songController; //노래 스크립트에서 노래의 박자,BPM등의 정보를 받아와야 함
-    public UIManager uiManager;
+    public SongManager uiManager;
 
     [Tooltip("몇 박마다 노트를 뽑을지에 대한 변수")]
     public float spawnEveryNBeats; // float으로 변경

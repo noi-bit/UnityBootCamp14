@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EnumData
+public static class EnumData
 {
     public enum LV
     {

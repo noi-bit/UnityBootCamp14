@@ -42,39 +42,33 @@ public class SongController : MonoBehaviour
 
     private void Awake()
     {
-        musicSource = GetComponent<AudioSource>();
+        if (musicSource == null)
+        {
+            musicSource = GetComponent<AudioSource>();
+        }
     }
 
-    private void OnEnable()
+    void Start()
     {
-        _running = false;
-        _metronomePrimed = false;
-        //_CubePrimed = false;
-        dspSongTime = 0;
+        sodata = GameManager.Song.currentSOdata;
+        bpmValue = GameManager.Song.GetLevelValue();
+
+        if (sodata != null)
+        {
+            musicSource.clip = sodata.music;
+            //musicSource.volume = sodata.volume;
+            //musicSource.loop = sodata.loop;
+            secPerBeat = 60f / sodata.BPM * bpmValue;
+        }
+
+        //GameManager.Instance.start += BeginSong;
     }
-
-    //void Start()
-    //{
-    //    sodata = SelectCanvas.UIinstance.list[SelectCanvas.UIinstance.cur];
-    //    //GameManager.Instance.start += BeginSong;
-    //    LevelLoad();
-
-    //    if (sodata != null)
-    //    {
-    //        musicSource = GetComponent<AudioSource>();
-    //        musicSource.clip = sodata.music;
-    //        //musicSource.volume = sodata.volume;
-    //        //musicSource.loop = sodata.loop;
-    //        secPerBeat = 60f / sodata.BPM * bpmValue;
-    //    }
-
-    //}
 
     void BeginSong()
     {
         _running = true;
 
-        double now = AudioSettings.dspTime;
+        double now = AudioSettings.dspTime; //정확하게 플레이 된 시간 -> 0초라고 보먄될듯?
         double safety = 0.1; // 예약 여유
         double wantDelay = nowCubetime - sodata.firstBeatOffset; // "큐브 피크 = 첫 박" 정렬
         double delay = Math.Max(safety, wantDelay);              // 과거로 예약 못하니 최소 safety 확보
@@ -95,6 +89,7 @@ public class SongController : MonoBehaviour
         if (!_running) return;
 
         double now = AudioSettings.dspTime;
+        //                 00초에서 계속늘어남  0.1초정도?     곡 마다의 첫 박자의 위치
         double songPositionInSeconds = now - dspSongTime - sodata.firstBeatOffset-0.01f; // 첫 박 기준 위치(초)
         nowDspTime = songPositionInSeconds;
 
@@ -107,15 +102,17 @@ public class SongController : MonoBehaviour
 
     private void CreateMetronome(double songPositionInSeconds)
     {
-        if(songPositionInSeconds < 0) { _metronomePrimed = false; return; }
+        if(songPositionInSeconds < 0) { _metronomePrimed = false; return; } 
+        //songPositionInSeconds얘는 -부터 계속 업뎃되는데 0초과가 되기 전까지는 return
 
-        float songPositioninBeats = ((float)songPositionInSeconds/*- metronomoffset*/) / secPerBeat;
+        float songPositioninBeats = ((float)songPositionInSeconds) / secPerBeat; //마디를 float초 단위로 세어줌
         int currentBeat = Mathf.FloorToInt(songPositioninBeats);
 
         if(!_metronomePrimed)
         {
-            _metronomePrimed= true;
-            _lastMetronomeBeat = currentBeat;
+            _metronomePrimed = true;
+            _lastMetronomeBeat = currentBeat; 
+          //맨 처음 -1 = 0 이렇게 되고 currentBeat(0)은 계속 늘어나쥬 ㅋㅋ
             return;
         }
         while(currentBeat > _lastMetronomeBeat)
@@ -143,31 +140,12 @@ public class SongController : MonoBehaviour
         }
     }
 
-    //public void LevelLoad()
-    //{
-    //    switch (SelectCanvas.UIinstance.dropdownlevel)
-    //    {
-    //        case EnumData.LV.supereasy:
-    //            bpmValue = 4f;
-    //            break;
-    //        case EnumData.LV.easy:
-    //            bpmValue = 2f;
-    //            break;
-    //        case EnumData.LV.normal:
-    //            bpmValue = 1;
-    //            break;
-    //        case EnumData.LV.hard:
-    //            bpmValue = 0.5f;
-    //            break;
-    //    }
-    //}
-
-    // [추가] 씬 전환/파괴 시 구독 해제 (중복/누수 방지)
-    //private void OnDestroy()
-    //{
-    //    if (GameManager.Instance != null)
-    //        GameManager.Instance.start -= BeginSong;
-    //}
+     //[추가] 씬 전환/파괴 시 구독 해제 (중복/누수 방지)
+    private void OnDestroy()
+    {
+        //if (GameManager.Instance != null)
+        //    GameManager.Instance.start -= BeginSong;
+    }
 
     public void Pause()
     {

@@ -11,9 +11,9 @@ public class inTitleScene : BaseScene
 
     protected override void Init()
     {
+        SceneType = EnumData.Scene.Title;
         base.Init();
 
-        SceneType = EnumData.Scene.Title;
         FindSelectCanvas();
         ButtonSetting();
         selectCanvas.goGame += MoveScene;

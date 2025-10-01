@@ -17,6 +17,7 @@ public class SelectCanvas : MonoBehaviour
 
     [Header("Song Data")]
     [SerializeField] private List<SO_data> _songlist = new List<SO_data>();
+    [SerializeField] private SO_data currentsong;
     [SerializeField] private int cur = 0;
 
     [Header("Audio")]
@@ -31,12 +32,9 @@ public class SelectCanvas : MonoBehaviour
         _songlist.AddRange(SOsongs);
         if (_songlist == null) Debug.Log("노래가 리스트에 들어오지 않음");
         SetupUI();
-        LoadUI();
+        SetupSO();
     }
 
-    private void Start()
-    {
-    }
     private void OnEnable()
     {
         if(_songlist != null && _songlist.Count > 0)
@@ -56,23 +54,42 @@ public class SelectCanvas : MonoBehaviour
     public void OndropDownEvent(int index)
     {
         dropdownlevel = (EnumData.LV)index;
+        //GameManager.Song.LV = dropdownlevel;
     }
 
-    public void LoadUI()
+    public void SetupSO()
     {
         if (_songlist == null || _songlist.Count == 0) return;
-        SO_data currentsong = _songlist[cur];
+        currentsong = _songlist[cur];
         UIset(currentsong);
-
+        
     }
 
     void UIset(SO_data data)
     {
         if (data == null) return;
 
+        GameManager.Song.currentSOdata = data;
         cover.sprite = data.CoverImage;
         text.text = data.SongName;
         previewMusic.clip = data.music;
+        data.level = dropdownlevel;
+    }
+    public void SelectChangenext()
+    {
+        if (_songlist == null || _songlist.Count == 0) return;
+
+        cur = (cur + 1) % _songlist.Count;
+        SetupSO();
+        PlayCurrentMusic();
+    }
+    public void SelectChangebefore()
+    {
+        if (_songlist == null || _songlist.Count == 0) return;
+        StopPreviewMusic();
+        cur = (cur - 1 + _songlist.Count) % _songlist.Count;
+        SetupSO();
+        PlayCurrentMusic();
     }
     private void PlayCurrentMusic()
     {
@@ -87,22 +104,6 @@ public class SelectCanvas : MonoBehaviour
         {
             previewMusic.Stop();
         }
-    }
-    public void SelectChangenext()
-    {
-        if (_songlist == null || _songlist.Count == 0) return;
-
-        cur = (cur + 1) % _songlist.Count;
-        LoadUI();
-        PlayCurrentMusic();
-    }
-    public void SelectChangebefore()
-    {
-        if (_songlist == null || _songlist.Count == 0) return;
-        StopPreviewMusic();
-        cur = (cur - 1 + _songlist.Count) % _songlist.Count;
-        LoadUI();
-        PlayCurrentMusic();
     }
     public void GoGame()
     {

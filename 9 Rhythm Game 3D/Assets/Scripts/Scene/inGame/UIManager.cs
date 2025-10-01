@@ -6,8 +6,6 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    //---> 얘는 매니저가 아니라 게임씬에 붙어야할듯?
-
 
     public Text TimerText;
     public Text ScoreText;
@@ -51,11 +49,7 @@ public class UIManager : MonoBehaviour
 
         if(ScoreSlider.value == ScoreSlider.minValue)
         {
-            //GameManager.Instance.nowstats = EnumData.Scene.GameOver;
-            for (int i = 0; i < pad.Length; i++)
-            { pad[i]._gamegetstart = false; }
-            GameOverCanvas.gameObject.SetActive(true);
-            SongController.Pause();
+            GameManager._isGameStart = false;
         }
     }
 

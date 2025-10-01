@@ -17,8 +17,7 @@ public class GameoverUI : MonoBehaviour
 
     private void Resume()
     {
-        for (int i = 0; i < pad.Length; i++)
-        { pad[i]._gamegetstart = true; }
+        GameManager._isGameStart = false;
         SC.Resume();
 
     }
