@@ -5,7 +5,6 @@ public class SongManager //얘는 노래의 데이터만 담고있다?
 {
     public SO_data currentSOdata;
     
-
     public float GetLevelValue()
     {
         return currentSOdata.level switch

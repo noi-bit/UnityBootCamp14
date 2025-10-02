@@ -89,7 +89,7 @@ public class SongController : MonoBehaviour
         if (!_running) return;
 
         double now = AudioSettings.dspTime;
-        //                 00초에서 계속늘어남  0.1초정도?     곡 마다의 첫 박자의 위치
+        //                 00초에서 계속늘어남  0.1초정도?   곡 마디의 첫 박자의 위치
         double songPositionInSeconds = now - dspSongTime - sodata.firstBeatOffset-0.01f; // 첫 박 기준 위치(초)
         nowDspTime = songPositionInSeconds;
 
@@ -112,7 +112,7 @@ public class SongController : MonoBehaviour
         {
             _metronomePrimed = true;
             _lastMetronomeBeat = currentBeat; 
-          //맨 처음 -1 = 0 이렇게 되고 currentBeat(0)은 계속 늘어나쥬 ㅋㅋ
+          //맨 처음 -1 = 0 이렇게 되고 currentBeat(0)은 계속 늘어나
             return;
         }
         while(currentBeat > _lastMetronomeBeat)
@@ -122,7 +122,7 @@ public class SongController : MonoBehaviour
         }
     }
 
-    private void CreateCube(double songPositionInSeconds)
+    private void CreateCube(double songPositionInSeconds) // 노래의 첫 박부터 세어지는 초
     {
         double adjustedSongPosition = songPositionInSeconds;
         float nextCubeBeatTime = (_lastCubeBeat + 1) * secPerBeat;
@@ -140,13 +140,6 @@ public class SongController : MonoBehaviour
         }
     }
 
-     //[추가] 씬 전환/파괴 시 구독 해제 (중복/누수 방지)
-    private void OnDestroy()
-    {
-        //if (GameManager.Instance != null)
-        //    GameManager.Instance.start -= BeginSong;
-    }
-
     public void Pause()
     {
         if (_isPaused) return;
@@ -161,5 +154,12 @@ public class SongController : MonoBehaviour
         double pausedDur = AudioSettings.dspTime - _PausedAtDsp; //멈춘 시간 길이 정확하게 기록
         dspSongTime += (float)pausedDur; //기준 시작 시간에 += 로 뒤로 밀어 싱크를 유지
         musicSource.UnPause();
+    }
+
+     //[추가] 씬 전환/파괴 시 구독 해제 (중복/누수 방지)
+    private void OnDestroy()
+    {
+        //if (GameManager.Instance != null)
+        //    GameManager.Instance.start -= BeginSong;
     }
 }
