@@ -3,9 +3,8 @@ using static EnumData;
 
 public class SongManager //얘는 노래의 데이터만 담고있다?
 {
-    public SO_data currentSOdata;
-    
-    public float GetLevelValue()
+    public SO_data currentSOdata; //선택되어 재생되는 노래 정보
+    public float GetLevelValue() //레벨마다 리턴하는 값
     {
         return currentSOdata.level switch
         {

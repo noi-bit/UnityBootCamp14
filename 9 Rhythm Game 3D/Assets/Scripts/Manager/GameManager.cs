@@ -22,12 +22,7 @@ public class GameManager : MonoBehaviour
 
     public static bool _isGameStart;
 
-    //얘는 게임 시작할때만 딜레이가 생기는거니까? 여기없어도될듯?
-    //public float Globaldelay=4f;
-    //public Action start;
-    //public EnumData.Scene nowstats;
-
-    void Start()
+    void Start() //awake에서?
     {
         Init();
     }
@@ -75,5 +70,4 @@ public class GameManager : MonoBehaviour
         여기서 전체 클리어가 가능하게끔
         */
     }
-
 }
